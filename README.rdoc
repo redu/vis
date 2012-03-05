@@ -1,0 +1,2 @@
+== Redu Visualização
+Projeto de visualização do Redu, para criação de gráficos semânticos e relatórios.

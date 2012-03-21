@@ -9,21 +9,25 @@ gem 'rails', '3.2.1'
 gem 'json'
 gem "mongoid", "~> 2.4"
 gem "bson_ext", "~> 1.5"
-gem 'therubyracer'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
-
+  # gem 'sass-rails',   '~> 3.2.3'
+  # gem 'coffee-rails', '~> 3.2.1'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer'
-
+  gem 'therubyracer'
   gem 'uglifier', '>= 1.0.3'
 end
 
+group :test, :development do
+  gem 'rspec-rails'
+  gem 'mongoid-rspec'
+  gem 'ruby-debug'
+end
+
 gem 'jquery-rails'
+gem 'roar-rails'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

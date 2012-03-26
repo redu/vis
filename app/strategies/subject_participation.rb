@@ -1,0 +1,3 @@
+class SubjectParticipation
+
+end

@@ -21,9 +21,10 @@ group :assets do
 end
 
 group :test, :development do
-  gem 'rspec-rails'
+  gem "rspec-rails", "~> 2.7.0"
   gem 'mongoid-rspec'
   gem 'ruby-debug'
+  gem "shoulda-matchers"
 end
 
 gem 'jquery-rails'

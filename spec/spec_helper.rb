@@ -27,7 +27,11 @@ RSpec.configure do |config|
   # config.use_transactional_fixtures = true
 
   config.include Mongoid::Matchers
-  # If true, the base class of anonymous controllers will be inferred
+  config.before :each do
+    Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
+  end
+
+    # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false

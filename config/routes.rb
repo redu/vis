@@ -25,6 +25,8 @@ Vis::Application.routes.draw do
   #     end
   #   end
 
+  resources :hierarchy_notifications, :only => [:create]
+
   # Sample resource route with sub-resources:
   #   resources :products do
   #     resources :comments, :sales

@@ -6,21 +6,14 @@ class SubjectParticipation
   end
 
   def notifications
-    @notifications = HierarchyNotification.by_subject(@id)
+    HierarchyNotification.by_subject(@id)
   end
 
-  def helps_notifications
-    @notifications.by_type("help")
+  def helps
+    self.notifications.by_type("help").count
   end
 
-  def answers_helps_notifications
-    @notifications.by_type("answered_help")
-  end
-
-  def generate!
-    self.notifications
-
-    @helps = self.helps_notifications.count
-    @answered_helps = self.answers_helps_notifications.count
+  def answered_helps
+    self.notifications.by_type("answered_help").count
   end
 end

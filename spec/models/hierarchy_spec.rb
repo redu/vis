@@ -17,25 +17,23 @@ describe HierarchyNotification do
   it { should validate_presence_of(:type) }
 
   context "scopes" do
+    before do
+      2.times do
+        Factory(:hierarchy_notification)
+      end
+    end
+
     it "should take the notifications by subjects" do
       subj = 2.times.collect do
         Factory(:hierarchy_notification, :subject_id => 1)
       end
 
-      2.times do
-        Factory(:hierarchy_notification)
-      end
-
       HierarchyNotification.by_subject(1).to_set.should eq(subj.to_set)
     end
 
-    it "should take the notifications by typ" do
+    it "should take the notifications by type" do
       subj = 2.times.collect do
         Factory(:hierarchy_notification, :type => "answered_help")
-      end
-
-      2.times do
-        Factory(:hierarchy_notification)
       end
 
       HierarchyNotification.by_type("answered_help").to_set.should eq(subj.to_set)

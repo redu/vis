@@ -14,4 +14,7 @@ class HierarchyNotification
 
   validates_presence_of :user_id
   validates_presence_of :type
+
+  scope :by_subject, lambda { |id| where(:subject_id => id) }
+  scope :by_type, lambda { |kind| where(:type => kind) }
 end

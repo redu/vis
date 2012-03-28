@@ -33,7 +33,7 @@ describe HierarchyNotification do
 
     it "should take the notifications by type" do
       subj = 2.times.collect do
-        Factory(:hierarchy_notification, :type => "answered_help")
+        Factory(:hierarchy_notification_answered_help)
       end
 
       HierarchyNotification.by_type("answered_help").to_set.should eq(subj.to_set)

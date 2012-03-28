@@ -66,5 +66,10 @@ module Vis
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    config.user_data_authentication = {
+      :username => "core-team",
+      :password => "JOjLeRjcK"
+    }
   end
 end

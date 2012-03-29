@@ -1,5 +1,6 @@
 class SubjectParticipation
-  attr_reader :helps, :answered_helps
+  attr_reader :helps, :answered_helps,
+              :subjects_finalized, :enrollments
 
   def initialize (subject_id)
     @id = subject_id
@@ -15,5 +16,13 @@ class SubjectParticipation
 
   def answered_helps
     self.notifications.by_type("answered_help").count
+  end
+
+  def subjects_finalized
+    self.notifications.by_type("subject_finalized").count
+  end
+
+  def enrollments
+    self.notifications.by_type("enrollment").count
   end
 end

@@ -68,8 +68,8 @@ module Vis
     config.assets.version = '1.0'
 
     config.user_data_authentication = {
-      :username => "core-team",
-      :password => "JOjLeRjcK"
+      :password => "JOjLeRjcK",
+      :username => "core-team"
     }
   end
 end

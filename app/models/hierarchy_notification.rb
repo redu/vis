@@ -1,5 +1,7 @@
 class HierarchyNotification
   include Mongoid::Document
+  include Mongoid::Timestamps
+
   field :user_id
   field :type
   field :lecture_id

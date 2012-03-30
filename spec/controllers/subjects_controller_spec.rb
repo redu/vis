@@ -48,7 +48,6 @@ describe SubjectsController do
   end
 
   context "GET activities in the d3 bullet chart" do
-
     context "when format is NOT json" do
       before do
         @params = { :subject_id => 1,

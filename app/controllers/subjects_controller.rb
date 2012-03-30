@@ -13,8 +13,6 @@ class SubjectsController < ApplicationController
     @d3 = SubjectParticipation.new(params[:subject_id])
     @d3.extend(SubjectParticipationD3Representer)
 
-    respond_to do |format|
-      format.json { render :json => @d3 }
-    end
+    respond_with(@d3)
   end
 end

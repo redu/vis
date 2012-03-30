@@ -7,9 +7,9 @@ class HierarchyNotificationsController < ApplicationController
 
     respond_to do |format|
       if @hierarchy.save
-        format.js { render :json => @hierarchy.to_json, :status => 200 }
+        format.json { render :json => @hierarchy.to_json, :status => 201 }
       else
-        format.js { render :json => @hierarchy.errors.to_json, :status => 400 }
+        format.json { render :json => @hierarchy.errors.to_json, :status => 400 }
       end
     end
   end

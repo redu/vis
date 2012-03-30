@@ -18,7 +18,7 @@ class HierarchyNotificationsController < ApplicationController
 
   def authentication
     authenticate_or_request_with_http_basic do |username, password|
-      [password, username] == Vis::Application.config.user_data_authentication.values
+      [username, password] == Vis::Application.config.user_data_authentication.values
     end
   end
 end

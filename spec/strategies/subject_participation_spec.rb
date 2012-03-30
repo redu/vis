@@ -74,12 +74,24 @@ describe SubjectParticipation do
     end
   end
 
-  context "building" do
-    it "response" do
+  context "get methods" do
+    it "helps" do
       subject.helps.should == 3
+    end
+
+    it "answered helps" do
       subject.answered_helps.should == 3
+    end
+
+    it "subjects finalized" do
       subject.subjects_finalized.should == 2
+    end
+
+    it "enrollments" do
       subject.enrollments.should == 2
+    end
+
+    it "ranges" do
       subject.ranges.size.should == 2
     end
   end

@@ -1,52 +1,95 @@
 require 'spec_helper'
 
 describe SubjectsController do
-  context "activities" do
-    it "should return any data if format is not json" do
-      @params = { :subject_id => 1,
-                  :format => :html,
-                  :locale => "pt-BR" }
+  context "GET activities" do
+    context "when format is NOT json" do
+      before do
+        @params = { :subject_id => 1,
+                    :format => :html,
+                    :locale => "pt-BR" }
+      end
 
-      get :activities, @params
+      it "should return status code 406" do
+        get :activities, @params
 
-      response.body.should eq(" ")
+        response.status.should eq(406)
+      end
+
+      it "should return any data" do
+        get :activities, @params
+
+        response.body.should eq(" ")
+      end
     end
 
-    it "should return params correctly" do
-      @params = { :subject_id => 1,
-                  :format => :json,
-                  :locale => "pt-BR" }
+    context "when format is json" do
+      before do
+        @params = { :subject_id => 1,
+                    :format => :json,
+                    :locale => "pt-BR" }
 
-      get :activities, @params
+      end
 
-      body = JSON.parse(response.body)
-      body.should have(4).items
-      subjects = body['helps']
-      subjects.should_not be_nil
+      it "should return status code 200" do
+        get :activities, @params
+
+        response.status.should eq(200)
+      end
+
+      it "should return params correctly" do
+        get :activities, @params
+
+        body = JSON.parse(response.body)
+        body.should have(4).items
+        subjects = body['helps']
+        subjects.should_not be_nil
+      end
     end
   end
 
-  context "activities in the d3 bullet chart" do
-    it "should return any data if format is not json" do
-      @params = { :subject_id => 1,
-                  :format => :html,
-                  :locale => "pt-BR" }
+  context "GET activities in the d3 bullet chart" do
 
-      get :activities_d3, @params
+    context "when format is NOT json" do
+      before do
+        @params = { :subject_id => 1,
+                    :format => :html,
+                    :locale => "pt-BR" }
+      end
 
-      response.body.should eq(" ")
+      it "should return status code 406" do
+        get :activities_d3, @params
+
+        response.status.should eq(406)
+      end
+
+      it "should return any data" do
+        get :activities_d3, @params
+
+        response.body.should eq(" ")
+      end
     end
 
-    it "should return params correctly" do
-      @params = { :subject_id => 1,
-                  :format => :json,
-                  :locale => "pt-BR" }
+    context "when format is json" do
+      before do
+        @params = { :subject_id => 1,
+                    :format => :json,
+                    :locale => "pt-BR" }
 
-      get :activities_d3, @params
+      end
 
-      body = JSON.parse(response.body)
-      ranges = body['ranges']
-      ranges.size.should eq(2)
+      it "should return status code 200" do
+        get :activities_d3, @params
+
+        response.status.should eq(200)
+      end
+
+      it "should return params correctly" do
+        get :activities_d3, @params
+
+        body = JSON.parse(response.body)
+        ranges = body['ranges']
+        ranges.size.should eq(2)
+      end
     end
   end
 end

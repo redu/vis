@@ -41,6 +41,8 @@ describe SubjectParticipation do
   it { should_not respond_to :subjects_finalized= }
   it { should respond_to :enrollments}
   it { should_not respond_to :enrollments= }
+  it { should respond_to :ranges}
+  it { should_not respond_to :ranges= }
 
   context "preparing queries" do
     it "should take all notifications" do
@@ -66,12 +68,19 @@ describe SubjectParticipation do
     end
   end
 
+  context "preparing d3 response" do
+    it "should return ranges with subjects finalized and enrollments" do
+      subject.ranges.should eq([2,2])
+    end
+  end
+
   context "building" do
     it "response" do
       subject.helps.should == 3
       subject.answered_helps.should == 3
       subject.subjects_finalized.should == 2
       subject.enrollments.should == 2
+      subject.ranges.size.should == 2
     end
   end
 end

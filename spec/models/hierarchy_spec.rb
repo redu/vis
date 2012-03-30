@@ -12,6 +12,8 @@ describe HierarchyNotification do
   it { should have_field(:statusable_type) }
   it { should have_field(:in_response_to_id) }
   it { should have_field(:in_response_to_type) }
+  it { should have_field(:created_at) }
+  it { should have_field(:updated_at) }
 
   it { should validate_presence_of(:user_id) }
   it { should validate_presence_of(:type) }

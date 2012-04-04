@@ -1,6 +1,7 @@
 class SubjectParticipation
   attr_reader :helps, :answered_helps,
-              :subjects_finalized, :enrollments, :ranges
+              :subjects_finalized, :enrollments, :ranges,
+              :markers, :measures
 
   def initialize (subject_id)
     @id = subject_id
@@ -28,6 +29,8 @@ class SubjectParticipation
 
   # Método para construção do d3 bullet charts
   def ranges
+    @markers =[0]
+    @measures = [0]
     [self.subjects_finalized, self.enrollments]
   end
 end

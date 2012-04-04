@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   after_filter :set_access_control_headers
 
   private
+  # Este método no rails permite o compartilhamento dos recursos
+  # entre domínios distintos
   def set_access_control_headers
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'

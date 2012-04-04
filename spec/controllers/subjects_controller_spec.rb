@@ -48,7 +48,6 @@ describe SubjectsController do
   end
 
   context "GET activities in the d3 bullet chart" do
-
     context "when format is NOT json" do
       before do
         @params = { :subject_id => 1,
@@ -87,7 +86,7 @@ describe SubjectsController do
         get :activities_d3, @params
 
         body = JSON.parse(response.body)
-        ranges = body['ranges']
+        ranges = body[0]['ranges']
         ranges.size.should eq(2)
       end
     end

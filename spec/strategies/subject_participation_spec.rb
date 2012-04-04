@@ -43,6 +43,10 @@ describe SubjectParticipation do
   it { should_not respond_to :enrollments= }
   it { should respond_to :ranges}
   it { should_not respond_to :ranges= }
+  it { should respond_to :markers}
+  it { should_not respond_to :markers= }
+  it { should respond_to :measures}
+  it { should_not respond_to :measures= }
 
   context "preparing queries" do
     it "should take all notifications" do
@@ -69,6 +73,11 @@ describe SubjectParticipation do
   end
 
   context "preparing d3 response" do
+    it "should return measures and markers empty only to compose the json bullet" do
+      subject.ranges
+      subject.measures[0].should == 0
+      subject.markers[0].should == 0
+    end
     it "should return ranges with subjects finalized and enrollments" do
       subject.ranges.should eq([2,2])
     end

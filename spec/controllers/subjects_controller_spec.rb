@@ -86,7 +86,7 @@ describe SubjectsController do
         get :activities_d3, @params
 
         body = JSON.parse(response.body)
-        ranges = body['ranges']
+        ranges = body[0]['ranges']
         ranges.size.should eq(2)
       end
     end

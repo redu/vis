@@ -87,7 +87,7 @@ describe SubjectsController do
 
         body = JSON.parse(response.body)
         ranges = body[0]['ranges']
-        ranges.size.should eq(2)
+        ranges.size.should eq(1)
       end
     end
   end

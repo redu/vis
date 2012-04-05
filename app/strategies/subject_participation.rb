@@ -30,7 +30,10 @@ class SubjectParticipation
   # Método para construção do d3 bullet charts
   def ranges
     @markers =[0]
-    @measures = [0]
-    [self.subjects_finalized, self.enrollments]
+    [self.enrollments]
+  end
+
+  def measures
+    [self.subjects_finalized]
   end
 end

@@ -75,11 +75,15 @@ describe SubjectParticipation do
   context "preparing d3 response" do
     it "should return measures and markers empty only to compose the json bullet" do
       subject.ranges
-      subject.measures[0].should == 0
       subject.markers[0].should == 0
     end
-    it "should return ranges with subjects finalized and enrollments" do
-      subject.ranges.should eq([2,2])
+
+    it "should return ranges with enrollments" do
+      subject.ranges.should eq([2])
+    end
+
+    it "should return ranges with subjects finalized" do
+      subject.measures.should eq([2])
     end
   end
 
@@ -101,7 +105,11 @@ describe SubjectParticipation do
     end
 
     it "ranges" do
-      subject.ranges.size.should == 2
+      subject.ranges.size.should == 1
+    end
+
+    it "measures" do
+      subject.measures.size.should == 1
     end
   end
 end

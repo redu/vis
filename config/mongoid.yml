@@ -8,11 +8,19 @@ test:
 
 # set these environment variables on your staging server
 staging:
-  uri: <%= ENV['MONGOLAB_URI'] %>
+  host: <%= ENV['MONGOID_HOST'] %>
+  port: <%= ENV['MONGOID_PORT'] %>
+  username: <%= ENV['MONGOID_USERNAME'] %>
+  password: <%= ENV['MONGOID_PASSWORD'] %>
+  database: <%= ENV['MONGOID_DATABASE'] %>
 
 # set these environment variables on your prod server
 production:
-  uri: <%= ENV['MONGOLAB_URI'] %>
+  host: <%= ENV['MONGOID_HOST'] %>
+  port: <%= ENV['MONGOID_PORT'] %>
+  username: <%= ENV['MONGOID_USERNAME'] %>
+  password: <%= ENV['MONGOID_PASSWORD'] %>
+  database: <%= ENV['MONGOID_DATABASE'] %>
   # slaves:
   #   - host: slave1.local
   #     port: 27018

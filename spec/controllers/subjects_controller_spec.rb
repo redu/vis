@@ -40,8 +40,8 @@ describe SubjectsController do
         get :activities, @params
 
         body = JSON.parse(response.body)
-        body.should have(4).items
-        subjects = body['helps']
+        body.should have(6).items
+        subjects = body['helps_answered']
         subjects.should_not be_nil
       end
     end

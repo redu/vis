@@ -1,6 +1,7 @@
 development:
   host: localhost
   database: vis_development
+  port: 27017
 
 test:
   host: localhost

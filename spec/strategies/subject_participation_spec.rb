@@ -81,7 +81,7 @@ describe SubjectParticipation do
   end
 
   context "preparing d3 response" do
-    it "should return markers with the same velue of the measure to compose the json bullet" do
+    it "should return markers with the same value of the range to compose the json bullet" do
       subject.markers[0].should == subject.measures[0]
     end
 

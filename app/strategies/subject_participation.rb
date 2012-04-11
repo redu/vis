@@ -47,6 +47,6 @@ class SubjectParticipation
   end
 
   def markers
-    self.measures
+    self.ranges
   end
 end

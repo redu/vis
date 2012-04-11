@@ -57,7 +57,7 @@ describe HierarchyNotification do
       end
 
       answers = HierarchyNotification.by_type("answered_help")
-      HierarchyNotification.helps_answered(answers).to_set.should eq(helps.to_set)
+      HierarchyNotification.answered(answers).to_set.should eq(helps.to_set)
     end
   end
 end

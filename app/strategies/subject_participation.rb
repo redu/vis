@@ -22,7 +22,7 @@ class SubjectParticipation
   def helps_answered
     help = self.notifications.by_type("help")
     ans = self.notifications.by_type("answered_help")
-    help.helps_answered(ans).count
+    help.answered(ans).count
   end
 
   def helps_not_answered

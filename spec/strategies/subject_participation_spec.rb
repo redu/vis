@@ -7,17 +7,13 @@ describe SubjectParticipation do
     @answers_help = []
     @finalized = []
     @enrollment = []
-    @status_id = 1
 
     3.times do
-      h = Factory(:hierarchy_notification_help, :subject_id => @id,
-                  :status_id => @status_id)
+      h = Factory(:hierarchy_notification_help, :subject_id => @id)
       @helps << h
       @answers_help << Factory(:hierarchy_notification_answered_help,
                           :subject_id => h.subject_id,
-                          :in_response_to_id => h.status_id,
-                          :in_response_to_type => "Status")
-      @status_id =+ 1
+                          :in_response_to_id => h.status_id)
     end
 
     2.times do
@@ -27,10 +23,9 @@ describe SubjectParticipation do
                              :subject_id => @id)
     end
 
-    @helps << Factory(:hierarchy_notification_help, :subject_id => @id,
-                      :status_id => 5)
+    @helps_n = [Factory(:hierarchy_notification_help, :subject_id => @id)]
 
-    @notifications = @helps + @answers_help + @finalized + @enrollment
+    @notifications = @helps_n + @helps + @answers_help + @finalized + @enrollment
 
     2.times do
       h = Factory(:hierarchy_notification_help, :subject_id => 2)
@@ -64,7 +59,7 @@ describe SubjectParticipation do
 
   context "executing queries" do
     it "should take all helps" do
-      subject.notifications.by_type("help").to_set.should eq(@helps.to_set)
+      subject.notifications.by_type("help").to_set.should eq((@helps + @helps_n).to_set)
     end
 
     it "should take all answers from helps" do
@@ -73,7 +68,7 @@ describe SubjectParticipation do
 
     it "should take all helps with answers from helps" do
       ans = subject.notifications.by_type("answered_help")
-      subject.notifications.by_type("help").helps_answered(ans).to_set == @helps.to_set
+      subject.notifications.by_type("help").answered(ans).to_set == @helps.to_set
     end
 
     it "should take all lectures finalized" do

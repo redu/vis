@@ -36,13 +36,41 @@ describe SubjectsController do
         response.status.should eq(200)
       end
 
-      it "should return params correctly" do
-        get :activities, @params
+      context "should return params correctly" do
+        before do
+          get :activities, @params
+          @body = JSON.parse(response.body)
+        end
 
-        body = JSON.parse(response.body)
-        body.should have(4).items
-        subjects = body['helps']
-        subjects.should_not be_nil
+        it "with total helps" do
+          proper = @body['helps']
+          proper.should_not be_nil
+        end
+
+        it "with helps answered" do
+          proper = @body['helps_answered']
+          proper.should_not be_nil
+        end
+
+        it "with helps not answered" do
+          proper = @body['helps_not_answered']
+          proper.should_not be_nil
+        end
+
+        it "with answered helps" do
+          proper = @body['answered_helps']
+          proper.should_not be_nil
+        end
+
+        it "with quantity of subjects finalized" do
+          proper = @body['helps_answered']
+          proper.should_not be_nil
+        end
+
+        it "with quantity of students enrolled" do
+          proper = @body['enrollments']
+          proper.should_not be_nil
+        end
       end
     end
   end
@@ -82,12 +110,26 @@ describe SubjectsController do
         response.status.should eq(200)
       end
 
-      it "should return params correctly" do
-        get :activities_d3, @params
+      context "should return params correctly" do
+        before do
+          get :activities_d3, @params
+          @body = JSON.parse(response.body)
+        end
 
-        body = JSON.parse(response.body)
-        ranges = body[0]['ranges']
-        ranges.size.should eq(1)
+        it "with ranges" do
+          ranges = @body[0]['ranges']
+          ranges.size.should eq(1)
+        end
+
+        it "with measures" do
+          ranges = @body[0]['measures']
+          ranges.size.should eq(1)
+        end
+
+        it "with markers" do
+          ranges = @body[0]['markers']
+          ranges.size.should eq(1)
+        end
       end
     end
   end

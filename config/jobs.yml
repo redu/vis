@@ -1,0 +1,9 @@
+s3:
+  access_id: AKIAIRKVQDTWT2NN4J4Q
+  secret_key: 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
+
+jobs:
+  - interval: 1m
+    db: mongodb://:@localhost:27017/vis_staging
+    location: redu-backup/staging
+    versions: 10

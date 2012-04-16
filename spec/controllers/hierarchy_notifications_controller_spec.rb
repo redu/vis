@@ -11,7 +11,7 @@ describe HierarchyNotificationsController do
                   :statusable_id => nil,
                   :statusable_type => nil, :in_response_to_id => nil,
                   :in_response_to_type => nil, :type => "lecture_created" },
-                  :format => :js }
+                  :format => "json" }
     end
 
     context "when authorized" do
@@ -31,9 +31,9 @@ describe HierarchyNotificationsController do
       end
 
       context "and well formated" do
-        it "should responds within code 200 OK" do
+        it "should responds within code 201 OK" do
           post :create, @params
-          response.code.should == "200"
+          response.code.should == "201"
         end
 
         it "should create a hierarchy notification" do
@@ -46,7 +46,7 @@ describe HierarchyNotificationsController do
       context "and not well formated" do
         it "should responds within code 400 Bad request" do
           @params_error = { :hierarchy_notification => { :subject_id => 1 },
-                            :format => :js }
+                            :format => :json }
           post :create, @params_error
           response.code.should == "400"
         end

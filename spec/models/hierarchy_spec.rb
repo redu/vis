@@ -40,5 +40,24 @@ describe HierarchyNotification do
 
       HierarchyNotification.by_type("answered_help").to_set.should eq(subj.to_set)
     end
+
+    it "should take helps with answers" do
+      helps =[]
+      id = 1
+      Factory(:hierarchy_notification_help, :status_id => 3)
+      2.times do
+        h = Factory(:hierarchy_notification_help,
+                    :status_id => id)
+        helps << h
+        2.times do
+          Factory(:hierarchy_notification_answered_help,
+                  :in_response_to_id => h.status_id)
+        end
+        id =+ 1
+      end
+
+      answers = HierarchyNotification.by_type("answered_help")
+      HierarchyNotification.answered(answers).to_set.should eq(helps.to_set)
+    end
   end
 end

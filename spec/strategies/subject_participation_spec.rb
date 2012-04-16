@@ -32,6 +32,13 @@ describe SubjectParticipation do
       Factory(:hierarchy_notification_answered_help,
               :subject_id => h.subject_id)
     end
+
+    @total_helps_count = @helps.length + @helps_n.length
+    @answers_count = @answers_help.length
+    @helps_ans_count = @helps.length
+    @helps_not_ans_count = @helps_n.length
+    @enroll_count = @enrollment.length
+    @finalized_count = @finalized.length
   end
 
   subject{ SubjectParticipation.new(@id) }
@@ -81,42 +88,42 @@ describe SubjectParticipation do
   end
 
   context "preparing d3 response" do
-    it "should return markers with the same value of the range to compose the json bullet" do
-      subject.markers[0].should == subject.measures[0]
-    end
-
     it "should return ranges with enrollments" do
-      subject.ranges.should eq([2])
+      subject.ranges.should eq([@enroll_count])
     end
 
     it "should return measures with subjects finalized" do
-      subject.measures.should eq([2])
+      subject.measures.should eq([@finalized_count])
+    end
+
+    it "should return markers with the same value of the range to compose the json bullet" do
+      subject.markers[0].should == subject.measures[0]
     end
   end
 
   context "get methods" do
     it "helps" do
-      subject.helps.should == 4
+      subject.helps.should == @total_helps_count
     end
 
     it "answered helps" do
-      subject.answered_helps.should == 3
+      subject.answered_helps.should == @answers_count
     end
 
     it "helps answered" do
-      subject.helps_answered.should == 3
+      subject.helps_answered.should == @helps_ans_count
     end
 
     it "helps not answered" do
-      subject.helps_not_answered == 1
+      subject.helps_not_answered == @helps_not_ans_count
     end
 
     it "subjects finalized" do
-      subject.subjects_finalized.should == 2
+      subject.subjects_finalized.should == @finalized_count
     end
 
     it "enrollments" do
-      subject.enrollments.should == 2
+      subject.enrollments.should == @enroll_count
     end
 
     it "ranges" do
@@ -125,6 +132,10 @@ describe SubjectParticipation do
 
     it "measures" do
       subject.measures.size.should == 1
+    end
+
+    it "markers" do
+      subject.markers.size.should == 1
     end
   end
 end

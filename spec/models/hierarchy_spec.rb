@@ -60,4 +60,15 @@ describe HierarchyNotification do
       HierarchyNotification.answered(answers).to_set.should eq(helps.to_set)
     end
   end
+
+  it "verify if already HierarchyNotification exists" do
+    old = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
+                                    :type => "enrollment")
+    old.save!
+
+    recent = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
+                                       :type => "enrollment")
+
+    HierarchyNotification.notification_exists?(recent).should be_true
+  end
 end

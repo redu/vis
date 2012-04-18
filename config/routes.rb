@@ -28,7 +28,7 @@ Vis::Application.routes.draw do
   #     end
   #   end
 
-  resources :database_hierarchy_notification, :only => [:create]
+  resources :database_hierarchy_notifications, :only => [:create]
   resources :hierarchy_notifications, :only => [:create]
 
   # Sample resource route with sub-resources:

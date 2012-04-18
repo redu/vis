@@ -3,12 +3,11 @@ class DatabaseHierarchyNotificationsController < ApplicationController
   before_filter :authentication
 
   def create
-    @hierarchy = HierarchyNotification.new(params[:hierarchy_notification])
-    debugger
+    @hierarchy = HierarchyNotification.new(params[:database_hierarchy_notification])
 
     if HierarchyNotification.notification_exists?(@hierarchy)
       respond_to do |format|
-        format.json { render :status => 201 }
+        format.json { render :json => {}, :status => 304 }
       end
     else
       respond_to do |format|

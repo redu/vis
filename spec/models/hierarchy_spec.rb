@@ -61,7 +61,7 @@ describe HierarchyNotification do
     end
   end
 
-  it "verify if already HierarchyNotification exists" do
+  it "verify if a HierarchyNotification already exists" do
     old = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
                                     :type => "enrollment")
     old.save!

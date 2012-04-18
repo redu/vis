@@ -2,16 +2,16 @@ class HierarchyNotification
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  field :user_id
+  field :user_id, :type => Integer
   field :type
-  field :lecture_id
-  field :subject_id
-  field :space_id
-  field :course_id
-  field :status_id
-  field :statusable_id
+  field :lecture_id, :type => Integer
+  field :subject_id, :type => Integer
+  field :space_id, :type => Integer
+  field :course_id, :type => Integer
+  field :status_id, :type => Integer
+  field :statusable_id, :type => Integer
   field :statusable_type
-  field :in_response_to_id
+  field :in_response_to_id, :type => Integer
   field :in_response_to_type
 
   validates_presence_of :user_id

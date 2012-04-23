@@ -43,7 +43,7 @@ describe DatabaseHierarchyNotificationsController do
           h.save!
 
           post :create, @params
-          response.code.should == "304"
+          response.code.should == "204"
         end
       end
 

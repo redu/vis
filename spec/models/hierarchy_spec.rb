@@ -61,14 +61,26 @@ describe HierarchyNotification do
     end
   end
 
-  it "verify if a HierarchyNotification already exists" do
-    old = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
-                                    :type => "enrollment")
-    old.save!
 
-    recent = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
-                                       :type => "enrollment")
+  context "verify if a HierarchyNotification" do
+    before do
+      old = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
+                                      :type => "enrollment")
+      old.save!
+    end
 
-    HierarchyNotification.notification_exists?(recent).should be_true
+    it "already exists" do
+      recent = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
+                                         :type => "enrollment")
+
+      HierarchyNotification.notification_exists?(recent).should be_true
+    end
+
+    it "doesn't exist" do
+      recent = HierarchyNotification.new(:user_id => 1, :subject_id => 2,
+                                         :type => "enrollment")
+
+      HierarchyNotification.notification_exists?(recent).should be_false
+    end
   end
 end

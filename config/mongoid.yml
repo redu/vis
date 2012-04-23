@@ -1,5 +1,3 @@
-use_object_ids: true
-
 development:
   host: localhost
   database: vis_development

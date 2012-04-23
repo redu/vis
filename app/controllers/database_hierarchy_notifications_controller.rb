@@ -7,7 +7,7 @@ class DatabaseHierarchyNotificationsController < ApplicationController
 
     if HierarchyNotification.notification_exists?(@hierarchy)
       respond_to do |format|
-        format.json { render :json => {}, :status => 304 }
+        format.json { render :json => {}, :status => 204 }
       end
     else
       respond_to do |format|

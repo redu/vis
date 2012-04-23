@@ -33,6 +33,14 @@ describe HierarchyNotification do
       HierarchyNotification.by_subject(1).to_set.should eq(subj.to_set)
     end
 
+    it "should tade the notifications by lectures" do
+      lec = 2.times.collect do
+        Factory(:hierarchy_notification, :lecture_id => 1)
+      end
+
+      HierarchyNotification.by_lecture(1).to_set.should eq(lec.to_set)
+    end
+
     it "should take the notifications by type" do
       subj = 2.times.collect do
         Factory(:hierarchy_notification_answered_help)

@@ -31,7 +31,7 @@ describe DatabaseHierarchyNotificationsController do
       end
 
       context "if notification already exists" do
-        it "should respons with code 304 Not Modified " do
+        it "should respons with code 409 Conflict" do
           h = HierarchyNotification.new(:user_id => 1, :lecture_id => 1,
                                         :subject_id => 1, :space_id => 1,
                                         :course_id => 1, :status_id => nil,
@@ -43,7 +43,7 @@ describe DatabaseHierarchyNotificationsController do
           h.save!
 
           post :create, @params
-          response.code.should == "204"
+          response.code.should == "409"
         end
       end
 

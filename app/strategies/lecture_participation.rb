@@ -2,7 +2,7 @@ class LectureParticipation
   attr_reader :helps, :answered_helps, :answered_activities,
               :activities, :visualizations, :helps_by_day,
               :answered_helps_by_day, :answered_activities_by_day,
-              :activities_by_day, :visualizations_by_day
+              :activities_by_day, :visualizations_by_day, :days
 
   attr_accessor :start, :end
 
@@ -12,6 +12,12 @@ class LectureParticipation
     @id = lecture_id
     @end = Date.today
     @start = @end - 9
+  end
+
+  def initialize_params(lecture_id, date_start, date_end)
+    @id = lecture_id.join(',').split(',')
+    @end = date_end.to_date
+    @start = date_start.to_date
   end
 
   def notifications
@@ -56,6 +62,18 @@ class LectureParticipation
 
     (0..(self.end - self.start)).each do
       daily << notifications.by_type(type).by_day(start).count
+      start += 1
+    end
+
+    daily
+  end
+
+  def days
+    start = self.start
+    daily = []
+
+    (0..(self.end - self.start)).each do
+      daily << start.strftime("%-d/%m")
       start += 1
     end
 

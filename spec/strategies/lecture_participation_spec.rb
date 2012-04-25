@@ -62,6 +62,9 @@ describe LectureParticipation do
   it { should_not respond_to :answered_activities= }
   it { should respond_to :visualizations }
   it { should_not respond_to :visualizations= }
+  it { should respond_to :days }
+  it { should_not respond_to :days= }
+
   it { should respond_to :helps_by_day }
   it { should_not respond_to :helps_by_day= }
   it { should respond_to :activities_by_day }
@@ -77,6 +80,18 @@ describe LectureParticipation do
   it { should respond_to :start= }
   it { should respond_to :end }
   it { should respond_to :end= }
+
+  context "initializing correctly" do
+    it "with default params" do
+      subject.end.should == Date.today
+    end
+
+    it "with personalized params" do
+      le = LectureParticipation.new(1)
+      le.initialize_params(["1,2"], "2012-10-02", "2012-10-30")
+      le.end.should == "2012-10-30".to_date
+    end
+  end
 
   context "preparing queries" do
     it "should take all notifications for lecture" do
@@ -148,6 +163,10 @@ describe LectureParticipation do
 
       it "answered helps" do
         subject.answered_helps_by_day[9].should eq(@answers_help_count)
+      end
+
+      it "days" do
+        subject.days[9].should eq(Date.today.strftime("%-d/%m"))
       end
 
       it "visualizations" do

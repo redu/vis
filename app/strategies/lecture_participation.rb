@@ -1,9 +1,17 @@
 class LectureParticipation
   attr_reader :helps, :answered_helps, :answered_activities,
-              :activities, :visualizations
+              :activities, :visualizations, :helps_by_day,
+              :answered_helps_by_day, :answered_activities_by_day,
+              :activities_by_day, :visualizations_by_day
 
+  attr_accessor :start, :end
+
+  # lecture_id = [id's] para um ou mais Lectures
+  # Para consultas por dia: start_time, end_time
   def initialize(lecture_id)
     @id = lecture_id
+    @end = Date.today
+    @start = @end - 9
   end
 
   def notifications
@@ -24,5 +32,33 @@ class LectureParticipation
 
   def answered_helps
     notifications.by_type("answered_help")
+  end
+
+  def helps_by_day
+    self.daily("help")
+  end
+
+  def activities_by_day
+    self.daily("activity")
+  end
+
+  def answered_activities_by_day
+    self.daily("answered_activity")
+  end
+
+  def answered_helps_by_day
+    self.daily("answered_help")
+  end
+
+  def daily(type)
+    start = self.start
+    daily = []
+
+    (0..(self.end - self.start)).each do
+      daily << notifications.by_type(type).by_day(start).count
+      start += 1
+    end
+
+    daily
   end
 end

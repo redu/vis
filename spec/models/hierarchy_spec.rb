@@ -20,8 +20,9 @@ describe HierarchyNotification do
 
   context "scopes" do
     before do
-      2.times do
-        Factory(:hierarchy_notification)
+      @day = ("2012-02-10").to_date
+      @facs = 2.times.collect do
+        Factory(:hierarchy_notification, :created_at => @day)
       end
     end
 
@@ -38,7 +39,7 @@ describe HierarchyNotification do
         Factory(:hierarchy_notification, :lecture_id => 1)
       end
 
-      HierarchyNotification.by_lecture(1).to_set.should eq(lec.to_set)
+      HierarchyNotification.by_lecture([1]).to_set.should eq(lec.to_set)
     end
 
     it "should take the notifications by type" do
@@ -66,6 +67,12 @@ describe HierarchyNotification do
 
       answers = HierarchyNotification.by_type("answered_help")
       HierarchyNotification.answered(answers).to_set.should eq(helps.to_set)
+    end
+
+    it "should take notifications by day" do
+      Factory(:hierarchy_notification, :created_at => @day + 1)
+
+      HierarchyNotification.by_day(@day).to_set.should eq(@facs.to_set)
     end
   end
 end

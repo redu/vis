@@ -37,7 +37,9 @@ class HierarchyNotification
       :subject_id => @hierarchy.subject_id,
       :space_id => @hierarchy.space_id,
       :course_id => @hierarchy.course_id,
-      :type => @hierarchy.type
+      :type => @hierarchy.type,
+      :created_at => @hierarchy.created_at,
+      :updated_at => @hierarchy.updated_at
     }
 
     self.exists?(:conditions => conditions)

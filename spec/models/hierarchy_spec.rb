@@ -75,4 +75,29 @@ describe HierarchyNotification do
       HierarchyNotification.by_day(@day).to_set.should eq(@facs.to_set)
     end
   end
+
+
+  context "verify if a HierarchyNotification" do
+    before do
+      @old = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
+                                      :type => "enrollment")
+      @old.save!
+    end
+
+    it "already exists" do
+      recent = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
+                                         :type => "enrollment",
+                                         :created_at => @old.created_at,
+                                         :updated_at => @old.updated_at)
+
+      HierarchyNotification.notification_exists?(recent).should be_true
+    end
+
+    it "doesn't exist" do
+      recent = HierarchyNotification.new(:user_id => 1, :subject_id => 2,
+                                         :type => "enrollment")
+
+      HierarchyNotification.notification_exists?(recent).should be_false
+    end
+  end
 end

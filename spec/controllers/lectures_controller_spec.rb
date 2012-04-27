@@ -45,24 +45,13 @@ describe LecturesController do
           @body = JSON.parse(response.body)
         end
 
-        it "with total helps" do
-          proper = @body['helps']
-          proper.should_not be_nil
-        end
-
-        it "with total answered helps" do
-          proper = @body['answered_helps']
-          proper.should_not be_nil
-        end
-
-        it "with total activities" do
-          proper = @body['activities']
-          proper.should_not be_nil
-        end
-
-        it "with total answered activities" do
-          proper = @body['answered_activities']
-          proper.should_not be_nil
+        ['helps', 'answered_helps', 'activities', 'answered_activities',
+         'helps_by_day', 'activities_by_day', 'answered_helps_by_day',
+         'answered_activities_by_day', 'days'].each do |type|
+          it "with total #{type}" do
+            proper = @body[type]
+            proper.should_not be_nil
+          end
         end
 
         it "with total visualizations" do
@@ -72,38 +61,12 @@ describe LecturesController do
           end
         end
 
-        it "with helps by day" do
-          proper = @body['helps_by_day']
-          proper.should_not be_nil
-        end
-
-        it "with answered helps by day" do
-          proper = @body['answered_helps_by_day']
-          proper.should_not be_nil
-        end
-
-        it "with activities by day" do
-          proper = @body['activities_by_day']
-          proper.should_not be_nil
-        end
-
-        it "with answered activities by day" do
-          proper = @body['answered_activities_by_day']
-          proper.should_not be_nil
-        end
-
-        it "with days" do
-          proper = @body['days']
-          proper.should_not be_nil
-        end
-
         it "with total visualizations by day" do
           pending "visualizations isn't at db" do
             proper = @body['visualizations_by_day']
             proper.should_not be_nil
           end
         end
-
       end
     end
   end

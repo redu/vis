@@ -8,13 +8,7 @@ class LectureParticipation
 
   # lecture_id = [id's] para um ou mais Lectures
   # Para consultas por dia: start_time, end_time
-  def initialize(lecture_id)
-    @id = lecture_id
-    @end = Date.today
-    @start = @end - 9
-  end
-
-  def initialize_params(lecture_id, date_start, date_end)
+  def initialize(lecture_id, date_start, date_end)
     @id = lecture_id.collect{ |id| id.to_i }
     @end = date_end.to_date
     @start = date_start.to_date

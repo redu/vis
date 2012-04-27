@@ -50,7 +50,7 @@ describe LectureParticipation do
     @answers_activity_count = @answers_activity.length
   end
 
-  subject{ LectureParticipation.new([@id[0]]) }
+  subject{ LectureParticipation.new([@id[0]], @day - 9, @day) }
 
   it { should respond_to :helps }
   it { should_not respond_to :helps= }
@@ -81,16 +81,9 @@ describe LectureParticipation do
   it { should respond_to :end }
   it { should respond_to :end= }
 
-  context "initializing correctly" do
-    it "with default params" do
-      subject.end.should == Date.today
-    end
-
-    it "with personalized params" do
-      le = LectureParticipation.new(1)
-      le.initialize_params(["1,2"], "2012-10-02", "2012-10-30")
-      le.end.should == "2012-10-30".to_date
-    end
+  it "initializing correctly" do
+    subject.end.should == Date.today
+    subject.start.should == Date.today - 9
   end
 
   context "preparing queries" do
@@ -125,9 +118,8 @@ describe LectureParticipation do
 
   context "filtering queries" do
     it "by lecture" do
-      lp = LectureParticipation.new(@id)
-      lp.notifications.to_set.should \
-        eq(@id_notifications.to_set)
+      lp = LectureParticipation.new(@id, @day - 9, @day)
+      lp.notifications.to_set.should eq(@id_notifications.to_set)
     end
 
     context "by day" do
@@ -150,23 +142,23 @@ describe LectureParticipation do
       end
 
       it "helps" do
-        subject.helps_by_day[9].should eq(@total_helps_count)
+        subject.helps_by_day.last.should eq(@total_helps_count)
       end
 
       it "activities" do
-        subject.activities_by_day[9].should eq(@activities_count)
+        subject.activities_by_day.last.should eq(@activities_count)
       end
 
       it "answered activities" do
-        subject.answered_activities_by_day[9].should eq(@answers_activity_count)
+        subject.answered_activities_by_day.last.should eq(@answers_activity_count)
       end
 
       it "answered helps" do
-        subject.answered_helps_by_day[9].should eq(@answers_help_count)
+        subject.answered_helps_by_day.last.should eq(@answers_help_count)
       end
 
       it "days" do
-        subject.days[9].should eq(Date.today.strftime("%-d/%m"))
+        subject.days.last.should eq(Date.today.strftime("%-d/%m"))
       end
 
       it "visualizations" do

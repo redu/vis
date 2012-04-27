@@ -24,8 +24,11 @@ describe SubjectParticipation do
     end
 
     @helps_n = [Factory(:hierarchy_notification_help, :subject_id => @id)]
+    @remove_enrollment = [Factory(:hierarchy_notification_remove_enrollment,
+                                :subject_id => @id)]
 
-    @notifications = @helps_n + @helps + @answers_help + @finalized + @enrollment
+    @notifications = @helps_n + @helps + @answers_help
+    @notifications += @finalized + @enrollment + @remove_enrollment
 
     2.times do
       h = Factory(:hierarchy_notification_help, :subject_id => 2)
@@ -85,11 +88,15 @@ describe SubjectParticipation do
     it "should take all members enrolled" do
       subject.notifications.by_type("enrollment").to_set.should eq(@enrollment.to_set)
     end
+
+    it "should take all members were removed from subject" do
+      subject.notifications.by_type("remove_enrollment").to_set.should eq(@remove_enrollment.to_set)
+    end
   end
 
   context "preparing d3 response" do
     it "should return ranges with enrollments" do
-      subject.ranges.should eq([@enroll_count])
+      subject.ranges.should eq([@enroll_count - @remove_enrollment.length])
     end
 
     it "should return measures with subjects finalized" do
@@ -97,7 +104,7 @@ describe SubjectParticipation do
     end
 
     it "should return markers with the same value of the range to compose the json bullet" do
-      subject.markers[0].should == subject.measures[0]
+      subject.markers[0].should == subject.ranges[0]
     end
   end
 
@@ -123,7 +130,7 @@ describe SubjectParticipation do
     end
 
     it "enrollments" do
-      subject.enrollments.should == @enroll_count
+      subject.enrollments.should == @enroll_count - @remove_enrollment.length
     end
 
     it "ranges" do

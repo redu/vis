@@ -40,6 +40,12 @@ FactoryGirl.define do
       hierar.sequence(:type){ "enrollment" }
   end
 
+  factory :hierarchy_notification_remove_enrollment,
+    :class => :hierarchy_notification do |hierar|
+      hierar.sequence(:user_id){ |n| n }
+      hierar.sequence(:type){ "remove_enrollment" }
+  end
+
   factory :hierarchy_notification_subject_finalized,
           :class => :hierarchy_notification do |hierar|
     hierar.sequence(:user_id){ |n| n }

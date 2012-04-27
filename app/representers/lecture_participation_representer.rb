@@ -12,4 +12,6 @@ module LectureParticipationRepresenter
   property :answered_helps_by_day
   property :answered_activities_by_day
   property :visualizations_by_day
+
+  property :days
 end

@@ -15,7 +15,7 @@ class LectureParticipation
   end
 
   def initialize_params(lecture_id, date_start, date_end)
-    @id = lecture_id.join(',').split(',')
+    @id = lecture_id.collect{ |id| id.to_i }
     @end = date_end.to_date
     @start = date_start.to_date
   end

@@ -92,6 +92,11 @@ describe LecturesController do
           proper.should_not be_nil
         end
 
+        it "with days" do
+          proper = @body['days']
+          proper.should_not be_nil
+        end
+
         it "with total visualizations by day" do
           pending "visualizations isn't at db" do
             proper = @body['visualizations_by_day']

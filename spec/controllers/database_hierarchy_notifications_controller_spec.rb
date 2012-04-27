@@ -4,13 +4,15 @@ describe DatabaseHierarchyNotificationsController do
   context "POST create" do
     before do
       # Factory.build(:hierarchy_notification)
+      @created_at = Time.now
       @params = {:database_hierarchy_notification =>
                  {:user_id => 1, :lecture_id => 1,
                   :subject_id => 1, :space_id => 1,
                   :course_id => 1, :status_id => nil,
                   :statusable_id => nil,
                   :statusable_type => nil, :in_response_to_id => nil,
-                  :in_response_to_type => nil, :type => "subject_finalized" },
+                  :in_response_to_type => nil, :type => "subject_finalized",
+                  :created_at => @created_at, :updated_at => @created_at},
                   :format => "json"}
     end
 
@@ -39,7 +41,8 @@ describe DatabaseHierarchyNotificationsController do
                                         :statusable_type => nil,
                                         :in_response_to_id => nil,
                                         :in_response_to_type => nil,
-                                        :type => "subject_finalized")
+                                        :type => "subject_finalized",
+                                        :created_at => @created_at, :updated_at => @created_at )
           h.save!
 
           post :create, @params

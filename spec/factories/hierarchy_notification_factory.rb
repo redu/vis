@@ -1,14 +1,21 @@
 FactoryGirl.define do
   factory :hierarchy_notification do |hierar|
     hierar.sequence(:user_id){ |n| n }
-    hierar.sequence(:type){ "tipo" }
+    hierar.type "tipo"
   end
 
-  factory :hierarchy_notification_help,
+  factory :hierarchy_notification_activity,
           :class => :hierarchy_notification do |hierar|
     hierar.sequence(:user_id){ |n| n }
     hierar.sequence(:status_id){ |p| p }
-    hierar.sequence(:type){ "help" }
+    hierar.type "activity"
+  end
+
+  factory :hierarchy_notification_help,
+    :class => :hierarchy_notification do |hierar|
+      hierar.sequence(:user_id){ |n| n }
+      hierar.sequence(:status_id){ |p| p }
+      hierar.type "help"
   end
 
   factory :hierarchy_notification_answered_help,
@@ -16,18 +23,32 @@ FactoryGirl.define do
     hierar.sequence(:user_id){ |n| n }
     hierar.sequence(:status_id){ |p| p }
     hierar.sequence(:in_response_to_id){ |q| q }
-    hierar.sequence(:type){ "answered_help" }
+    hierar.type "answered_help"
+  end
+
+  factory :hierarchy_notification_answered_activity,
+    :class => :hierarchy_notification do |hierar|
+      hierar.sequence(:user_id){ |n| n }
+      hierar.sequence(:status_id){ |p| p }
+      hierar.sequence(:in_response_to_id){ |q| q }
+      hierar.type "answered_activity"
   end
 
   factory :hierarchy_notification_enrollment,
-          :class => :hierarchy_notification do |hierar|
-    hierar.sequence(:user_id){ |n| n }
-    hierar.sequence(:type){ "enrollment" }
+    :class => :hierarchy_notification do |hierar|
+      hierar.sequence(:user_id){ |n| n }
+      hierar.type "enrollment"
+  end
+
+  factory :hierarchy_notification_remove_enrollment,
+    :class => :hierarchy_notification do |hierar|
+      hierar.sequence(:user_id){ |n| n }
+      hierar.type "remove_enrollment"
   end
 
   factory :hierarchy_notification_subject_finalized,
           :class => :hierarchy_notification do |hierar|
     hierar.sequence(:user_id){ |n| n }
-    hierar.sequence(:type){ "subject_finalized" }
+    hierar.type "subject_finalized"
   end
 end

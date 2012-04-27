@@ -3,7 +3,7 @@ class SubjectParticipation
               :helps_not_answered, :subjects_finalized,
               :enrollments, :ranges, :markers, :measures
 
-  def initialize (subject_id)
+  def initialize(subject_id)
     @id = subject_id
   end
 
@@ -34,10 +34,11 @@ class SubjectParticipation
   end
 
   def enrollments
-    self.notifications.by_type("enrollment").count
+    removed = self.notifications.by_type("remove_enrollment").count
+    self.notifications.by_type("enrollment").count - removed
   end
 
-  # Método para construção do d3 bullet charts
+  # Método para construção do d3 bullet chart
   def ranges
     [self.enrollments]
   end

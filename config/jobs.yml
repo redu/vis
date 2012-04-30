@@ -6,4 +6,4 @@ jobs:
   - interval: 1m
     db: mongodb://:@localhost:27017/vis_staging
     location: redu-backup/staging
-    versions: 10
+    versions: 100

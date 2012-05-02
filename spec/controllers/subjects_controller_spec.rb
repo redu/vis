@@ -43,8 +43,8 @@ describe SubjectsController do
         end
 
         ['helps', 'helps_answered', 'helps_not_answered',
-         'answered_helps', 'subjects_finalized', 'enrollments',
-         'removed_enrollments'].each do |type|
+         'answered_helps', 'subjects_finalized',
+         'enrollments'].each do |type|
           it "with total #{type}" do
             proper = @body[type]
             proper.should_not be_nil

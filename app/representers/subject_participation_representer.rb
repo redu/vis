@@ -7,5 +7,4 @@ module SubjectParticipationRepresenter
   property :answered_helps
   property :subjects_finalized
   property :enrollments
-  property :removed_enrollments
 end

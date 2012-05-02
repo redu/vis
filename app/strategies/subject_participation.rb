@@ -1,8 +1,7 @@
 class SubjectParticipation
   attr_reader :helps, :answered_helps, :helps_answered,
               :helps_not_answered, :subjects_finalized,
-              :enrollments, :ranges, :markers, :measures,
-              :removed_enrollments
+              :enrollments, :ranges, :markers, :measures
 
   def initialize(subject_id)
     @id = subject_id

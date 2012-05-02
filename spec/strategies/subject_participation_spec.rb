@@ -54,8 +54,6 @@ describe SubjectParticipation do
   it { should_not respond_to :subjects_finalized= }
   it { should respond_to :enrollments}
   it { should_not respond_to :enrollments= }
-  it { should respond_to :removed_enrollments}
-  it { should_not respond_to :removed_enrollments= }
   it { should respond_to :ranges}
   it { should_not respond_to :ranges= }
   it { should respond_to :markers}

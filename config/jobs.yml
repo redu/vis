@@ -3,7 +3,7 @@ s3:
   secret_key: fd34osN7Is0gckllFl8OxZgOuZieeaiSHZg1TpAM
 
 jobs:
-  - interval: 1m
+  - interval: 1d
     db: mongodb://:@localhost:27017/vis_staging
     location: redu-backup/staging
     versions: 100

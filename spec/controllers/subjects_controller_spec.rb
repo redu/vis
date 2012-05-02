@@ -42,34 +42,13 @@ describe SubjectsController do
           @body = JSON.parse(response.body)
         end
 
-        it "with total helps" do
-          proper = @body['helps']
-          proper.should_not be_nil
-        end
-
-        it "with helps answered" do
-          proper = @body['helps_answered']
-          proper.should_not be_nil
-        end
-
-        it "with helps not answered" do
-          proper = @body['helps_not_answered']
-          proper.should_not be_nil
-        end
-
-        it "with answered helps" do
-          proper = @body['answered_helps']
-          proper.should_not be_nil
-        end
-
-        it "with quantity of subjects finalized" do
-          proper = @body['helps_answered']
-          proper.should_not be_nil
-        end
-
-        it "with quantity of students enrolled" do
-          proper = @body['enrollments']
-          proper.should_not be_nil
+        ['helps', 'helps_answered', 'helps_not_answered',
+         'answered_helps', 'subjects_finalized', 'enrollments',
+         'removed_enrollments'].each do |type|
+          it "with total #{type}" do
+            proper = @body[type]
+            proper.should_not be_nil
+          end
         end
       end
     end
@@ -116,19 +95,11 @@ describe SubjectsController do
           @body = JSON.parse(response.body)
         end
 
-        it "with ranges" do
-          ranges = @body[0]['ranges']
-          ranges.size.should eq(1)
-        end
-
-        it "with measures" do
-          ranges = @body[0]['measures']
-          ranges.size.should eq(1)
-        end
-
-        it "with markers" do
-          ranges = @body[0]['markers']
-          ranges.size.should eq(1)
+        ['ranges', 'measures', 'markers'].each do |key|
+          it "with total #{key}" do
+            proper = @body[0][key]
+            proper.size.should eq(1)
+          end
         end
       end
     end

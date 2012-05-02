@@ -54,6 +54,8 @@ describe SubjectParticipation do
   it { should_not respond_to :subjects_finalized= }
   it { should respond_to :enrollments}
   it { should_not respond_to :enrollments= }
+  it { should respond_to :removed_enrollments}
+  it { should_not respond_to :removed_enrollments= }
   it { should respond_to :ranges}
   it { should_not respond_to :ranges= }
   it { should respond_to :markers}
@@ -69,11 +71,13 @@ describe SubjectParticipation do
 
   context "executing queries" do
     it "should take all helps" do
-      subject.notifications.by_type("help").to_set.should eq((@helps + @helps_n).to_set)
+      subject.notifications.by_type("help").to_set.should \
+        eq((@helps + @helps_n).to_set)
     end
 
     it "should take all answers from helps" do
-      subject.notifications.by_type("answered_help").to_set.should eq(@answers_help.to_set)
+      subject.notifications.by_type("answered_help").to_set.should \
+        eq(@answers_help.to_set)
     end
 
     it "should take all helps with answers from helps" do
@@ -82,15 +86,18 @@ describe SubjectParticipation do
     end
 
     it "should take all lectures finalized" do
-      subject.notifications.by_type("subject_finalized").to_set.should eq(@finalized.to_set)
+      subject.notifications.by_type("subject_finalized").to_set.should \
+        eq(@finalized.to_set)
     end
 
     it "should take all members enrolled" do
-      subject.notifications.by_type("enrollment").to_set.should eq(@enrollment.to_set)
+      subject.notifications.by_type("enrollment").to_set.should \
+        eq(@enrollment.to_set)
     end
 
     it "should take all members were removed from subject" do
-      subject.notifications.by_type("remove_enrollment").to_set.should eq(@remove_enrollment.to_set)
+      subject.notifications.by_type("remove_enrollment").to_set.should \
+        eq(@remove_enrollment.to_set)
     end
   end
 
@@ -100,10 +107,11 @@ describe SubjectParticipation do
     end
 
     it "should return measures with subjects finalized" do
-      subject.measures.should eq([@finalized_count])
+      subject.measures.should eq([@finalized_count - @remove_enrollment.length])
     end
 
-    it "should return markers with the same value of the range to compose the json bullet" do
+    it "should return markers with the same value of the range
+    to compose the json bullet" do
       subject.markers[0].should == subject.ranges[0]
     end
   end
@@ -126,7 +134,8 @@ describe SubjectParticipation do
     end
 
     it "subjects finalized" do
-      subject.subjects_finalized.should == @finalized_count
+      removed = @remove_enrollment.length
+      subject.subjects_finalized.should == @finalized_count - removed
     end
 
     it "enrollments" do

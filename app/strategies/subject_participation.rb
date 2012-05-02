@@ -1,7 +1,8 @@
 class SubjectParticipation
   attr_reader :helps, :answered_helps, :helps_answered,
               :helps_not_answered, :subjects_finalized,
-              :enrollments, :ranges, :markers, :measures
+              :enrollments, :ranges, :markers, :measures,
+              :removed_enrollments
 
   def initialize(subject_id)
     @id = subject_id
@@ -30,12 +31,18 @@ class SubjectParticipation
   end
 
   def subjects_finalized
-    self.notifications.by_type("subject_finalized").count
+    removed = self.removed_enrollments
+    self.notifications.by_type("subject_finalized").count - removed
   end
 
   def enrollments
-    removed = self.notifications.by_type("remove_enrollment").count
-    self.notifications.by_type("enrollment").count - removed
+    self.notifications.by_type("enrollment").count - self.removed_enrollments
+  end
+
+  # Contagem de enrollments e subject_finalized deve levar em conta
+  # as matrículas desfeitas nos módulos
+  def removed_enrollments
+    self.notifications.by_type("remove_enrollment").count
   end
 
   # Método para construção do d3 bullet chart

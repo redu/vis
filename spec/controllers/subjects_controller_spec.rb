@@ -36,6 +36,15 @@ describe SubjectsController do
         response.status.should eq(200)
       end
 
+      it "should return params callback" do
+        callback = "myFunct"
+        @params.store(:callback, callback)
+
+        get :activities, @params
+
+        response.body.should include "#{callback}("
+      end
+
       context "should return params correctly" do
         before do
           get :activities, @params
@@ -108,6 +117,15 @@ describe SubjectsController do
         get :activities_d3, @params
 
         response.status.should eq(200)
+      end
+
+      it "should return params callback" do
+        callback = "myFunct"
+        @params.store(:callback, callback)
+
+        get :activities, @params
+
+        response.body.should include "#{callback}("
       end
 
       context "should return params correctly" do

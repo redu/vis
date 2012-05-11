@@ -39,6 +39,15 @@ describe LecturesController do
         response.status.should eq(200)
       end
 
+      it "should return params callback" do
+        callback = "myFunct"
+        @params.store(:callback, callback)
+
+        get :participation, @params
+
+        response.body.should include "#{callback}("
+      end
+
       context "should return params correctly" do
         before do
           get :participation, @params

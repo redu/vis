@@ -6,6 +6,9 @@ class LecturesController < ApplicationController
                                               params[:date_end])
     @participation.extend(LectureParticipationRepresenter)
 
-    respond_with(@participation)
+    respond_to do |format|
+      format.json { render :json => @participation,
+                    :callback => params[:callback] }
+    end
   end
 end

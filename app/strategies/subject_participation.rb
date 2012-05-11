@@ -30,12 +30,24 @@ class SubjectParticipation
   end
 
   def subjects_finalized
-    self.notifications.by_type("subject_finalized").count
+    removed = self.removed_subjects_finalized
+    self.notifications.by_type("subject_finalized").count - removed
   end
 
   def enrollments
-    removed = self.notifications.by_type("remove_enrollment").count
-    self.notifications.by_type("enrollment").count - removed
+    self.notifications.by_type("enrollment").count - self.removed_enrollments
+  end
+
+  # Contagem de enrollments deve levar em conta
+  # as matrículas desfeitas nos módulos
+  def removed_enrollments
+    self.notifications.by_type("remove_enrollment").count
+  end
+
+  # Contagem de subjects finalized deve levar em conta
+  # os subjects finalizeds desfeitos nos módulos
+  def removed_subjects_finalized
+    self.notifications.by_type("remove_subject_finalized").count
   end
 
   # Método para construção do d3 bullet chart

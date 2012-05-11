@@ -26,8 +26,10 @@ describe SubjectParticipation do
     @helps_n = [Factory(:hierarchy_notification_help, :subject_id => @id)]
     @remove_enrollment = [Factory(:hierarchy_notification_remove_enrollment,
                                 :subject_id => @id)]
+    @remove_finalized = [Factory(:hierarchy_notification_remove_subject_finalized,
+                                :subject_id => @id)]
 
-    @notifications = @helps_n + @helps + @answers_help
+    @notifications = @helps_n + @helps + @answers_help + @remove_finalized
     @notifications += @finalized + @enrollment + @remove_enrollment
 
     2.times do
@@ -69,11 +71,13 @@ describe SubjectParticipation do
 
   context "executing queries" do
     it "should take all helps" do
-      subject.notifications.by_type("help").to_set.should eq((@helps + @helps_n).to_set)
+      subject.notifications.by_type("help").to_set.should \
+        eq((@helps + @helps_n).to_set)
     end
 
     it "should take all answers from helps" do
-      subject.notifications.by_type("answered_help").to_set.should eq(@answers_help.to_set)
+      subject.notifications.by_type("answered_help").to_set.should \
+        eq(@answers_help.to_set)
     end
 
     it "should take all helps with answers from helps" do
@@ -81,29 +85,38 @@ describe SubjectParticipation do
       subject.notifications.by_type("help").answered(ans).to_set == @helps.to_set
     end
 
-    it "should take all lectures finalized" do
-      subject.notifications.by_type("subject_finalized").to_set.should eq(@finalized.to_set)
+    it "should take all subjects finalized" do
+      subject.notifications.by_type("subject_finalized").to_set.should \
+        eq(@finalized.to_set)
+    end
+
+    it "should take all subjects finalized were removed from subject" do
+      subject.notifications.by_type("remove_subject_finalized").to_set.should \
+        eq(@remove_finalized.to_set)
     end
 
     it "should take all members enrolled" do
-      subject.notifications.by_type("enrollment").to_set.should eq(@enrollment.to_set)
+      subject.notifications.by_type("enrollment").to_set.should \
+        eq(@enrollment.to_set)
     end
 
     it "should take all members were removed from subject" do
-      subject.notifications.by_type("remove_enrollment").to_set.should eq(@remove_enrollment.to_set)
+      subject.notifications.by_type("remove_enrollment").to_set.should \
+        eq(@remove_enrollment.to_set)
     end
   end
 
   context "preparing d3 response" do
-    it "should return ranges with enrollments" do
+    it "should return ranges with enrollments don't removed" do
       subject.ranges.should eq([@enroll_count - @remove_enrollment.length])
     end
 
-    it "should return measures with subjects finalized" do
-      subject.measures.should eq([@finalized_count])
+    it "should return measures with subjects finalized don't removed" do
+      subject.measures.should eq([@finalized_count - @remove_finalized.length])
     end
 
-    it "should return markers with the same value of the range to compose the json bullet" do
+    it "should return markers with the same value of the range
+    to compose the json bullet" do
       subject.markers[0].should == subject.ranges[0]
     end
   end
@@ -125,11 +138,12 @@ describe SubjectParticipation do
       subject.helps_not_answered == @helps_not_ans_count
     end
 
-    it "subjects finalized" do
-      subject.subjects_finalized.should == @finalized_count
+    it "subjects finalized don't removed" do
+      removed = @remove_finalized.length
+      subject.subjects_finalized.should == @finalized_count - removed
     end
 
-    it "enrollments" do
+    it "enrollments don't removed" do
       subject.enrollments.should == @enroll_count - @remove_enrollment.length
     end
 

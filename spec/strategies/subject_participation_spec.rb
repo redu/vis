@@ -26,8 +26,10 @@ describe SubjectParticipation do
     @helps_n = [Factory(:hierarchy_notification_help, :subject_id => @id)]
     @remove_enrollment = [Factory(:hierarchy_notification_remove_enrollment,
                                 :subject_id => @id)]
+    @remove_finalized = [Factory(:hierarchy_notification_remove_subject_finalized,
+                                :subject_id => @id)]
 
-    @notifications = @helps_n + @helps + @answers_help
+    @notifications = @helps_n + @helps + @answers_help + @remove_finalized
     @notifications += @finalized + @enrollment + @remove_enrollment
 
     2.times do
@@ -83,9 +85,14 @@ describe SubjectParticipation do
       subject.notifications.by_type("help").answered(ans).to_set == @helps.to_set
     end
 
-    it "should take all lectures finalized" do
+    it "should take all subjects finalized" do
       subject.notifications.by_type("subject_finalized").to_set.should \
         eq(@finalized.to_set)
+    end
+
+    it "should take all subjects finalized were removed from subject" do
+      subject.notifications.by_type("remove_subject_finalized").to_set.should \
+        eq(@remove_finalized.to_set)
     end
 
     it "should take all members enrolled" do
@@ -105,7 +112,7 @@ describe SubjectParticipation do
     end
 
     it "should return measures with subjects finalized" do
-      subject.measures.should eq([@finalized_count - @remove_enrollment.length])
+      subject.measures.should eq([@finalized_count - @remove_finalized.length])
     end
 
     it "should return markers with the same value of the range
@@ -132,7 +139,7 @@ describe SubjectParticipation do
     end
 
     it "subjects finalized" do
-      removed = @remove_enrollment.length
+      removed = @remove_finalized.length
       subject.subjects_finalized.should == @finalized_count - removed
     end
 

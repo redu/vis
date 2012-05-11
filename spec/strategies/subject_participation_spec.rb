@@ -107,11 +107,11 @@ describe SubjectParticipation do
   end
 
   context "preparing d3 response" do
-    it "should return ranges with enrollments" do
+    it "should return ranges with enrollments don't removed" do
       subject.ranges.should eq([@enroll_count - @remove_enrollment.length])
     end
 
-    it "should return measures with subjects finalized" do
+    it "should return measures with subjects finalized don't removed" do
       subject.measures.should eq([@finalized_count - @remove_finalized.length])
     end
 
@@ -138,12 +138,12 @@ describe SubjectParticipation do
       subject.helps_not_answered == @helps_not_ans_count
     end
 
-    it "subjects finalized" do
+    it "subjects finalized don't removed" do
       removed = @remove_finalized.length
       subject.subjects_finalized.should == @finalized_count - removed
     end
 
-    it "enrollments" do
+    it "enrollments don't removed" do
       subject.enrollments.should == @enroll_count - @remove_enrollment.length
     end
 

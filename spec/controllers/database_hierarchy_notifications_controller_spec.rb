@@ -18,7 +18,7 @@ describe DatabaseHierarchyNotificationsController do
 
     context "when authorized" do
       before do
-       @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("core-team:JOjLeRjcK")
+        @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("core-team:JOjLeRjcK")
       end
 
       it "should assign a @hierarchy variable" do
@@ -84,7 +84,6 @@ describe DatabaseHierarchyNotificationsController do
         post :create, @params
         response.code.should == "401"
       end
-
     end
   end
 end

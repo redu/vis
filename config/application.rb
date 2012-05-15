@@ -71,5 +71,10 @@ module Vis
       :password => "JOjLeRjcK",
       :username => "core-team"
     }
+
+    config.api_data_authentication = {
+      :password => "NyugAkSoP",
+      :username => "api-team"
+    }
   end
 end

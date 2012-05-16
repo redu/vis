@@ -14,6 +14,7 @@ describe HierarchyNotification do
   it { should have_field(:in_response_to_type) }
   it { should have_field(:created_at) }
   it { should have_field(:updated_at) }
+  it { should have_field(:grade) }
 
   it { should validate_presence_of(:user_id) }
   it { should validate_presence_of(:type) }
@@ -73,6 +74,21 @@ describe HierarchyNotification do
       Factory(:hierarchy_notification, :created_at => @day + 1)
 
       HierarchyNotification.by_day(@day).to_set.should eq(@facs.to_set)
+    end
+
+    it "should return the grade average from user" do
+      @grade = 0
+      @user_id = 1
+      4.times do
+        exer = Factory(:hierarchy_notification_exercise_finalized,
+                      :user_id => @user_id)
+        @grade += exer.grade
+      end
+
+      Factory(:hierarchy_notification_exercise_finalized,
+              :user_id => 2)
+
+      HierarchyNotification.grade_average(@user_id).should == @grade/4
     end
   end
 

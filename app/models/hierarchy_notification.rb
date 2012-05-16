@@ -13,6 +13,7 @@ class HierarchyNotification
   field :statusable_type
   field :in_response_to_id, :type => Integer
   field :in_response_to_type
+  field :grade, :type => Float
 
   validates_presence_of :user_id
   validates_presence_of :type
@@ -45,5 +46,11 @@ class HierarchyNotification
     }
 
     self.exists?(:conditions => conditions)
+  end
+
+  class << self
+    def grade_average(id)
+      where(:user_id => id).avg(:grade)
+    end
   end
 end

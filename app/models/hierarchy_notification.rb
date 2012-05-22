@@ -27,22 +27,20 @@ class HierarchyNotification
       :type => "help") }
 
   def self.notification_exists?(hierar)
-    @hierarchy = hierar
-
     conditions = {
-      :user_id => @hierarchy.user_id,
-      :status_id => @hierarchy.status_id,
-      :statusable_id => @hierarchy.statusable_id,
-      :statusable_type => @hierarchy.statusable_type,
-      :in_response_to_id => @hierarchy.in_response_to_id,
-      :in_response_to_type => @hierarchy.in_response_to_type,
-      :lecture_id => @hierarchy.lecture_id,
-      :subject_id => @hierarchy.subject_id,
-      :space_id => @hierarchy.space_id,
-      :course_id => @hierarchy.course_id,
-      :type => @hierarchy.type,
-      :created_at => @hierarchy.created_at,
-      :updated_at => @hierarchy.updated_at
+      :user_id => hierar.user_id,
+      :status_id => hierar.status_id,
+      :statusable_id => hierar.statusable_id,
+      :statusable_type => hierar.statusable_type,
+      :in_response_to_id => hierar.in_response_to_id,
+      :in_response_to_type => hierar.in_response_to_type,
+      :lecture_id => hierar.lecture_id,
+      :subject_id => hierar.subject_id,
+      :space_id => hierar.space_id,
+      :course_id => hierar.course_id,
+      :type => hierar.type,
+      :created_at => hierar.created_at,
+      :updated_at => hierar.updated_at
     }
 
     self.exists?(:conditions => conditions)

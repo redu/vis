@@ -77,18 +77,18 @@ describe HierarchyNotification do
     end
 
     it "should return the grade average from user" do
-      @grade = 0
-      @user_id = 1
+      grade = 0
+      user_id = 1
       4.times do
         exer = Factory(:hierarchy_notification_exercise_finalized,
-                      :user_id => @user_id)
-        @grade += exer.grade
+                      :user_id => user_id)
+        grade += exer.grade
       end
 
       Factory(:hierarchy_notification_exercise_finalized,
               :user_id => 2)
 
-      HierarchyNotification.grade_average(@user_id).should == @grade/4
+      HierarchyNotification.grade_average(user_id).should == grade/4
     end
   end
 

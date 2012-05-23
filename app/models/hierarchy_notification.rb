@@ -17,6 +17,7 @@ class HierarchyNotification
   validates_presence_of :user_id
   validates_presence_of :type
 
+  scope :by_space, lambda { |id| where(:space_id => id) }
   scope :by_subject, lambda { |id| where(:subject_id => id) }
   scope :by_lecture, lambda { |id| any_in(:lecture_id => id) }
   scope :by_type, lambda { |kind| where(:type => kind) }
@@ -24,6 +25,8 @@ class HierarchyNotification
   scope :answered, lambda { |answers|
     any_in(:status_id => answers.distinct(:in_response_to_id)).where(
       :type => "help") }
+  scope :by_user, lambda { |id| where(:user_id => id) }
+  scope :by_period, lambda { |date1, date2| where(:created_at => (date1..date2))}
 
   def self.notification_exists?(hierar)
     @hierarchy = hierar
@@ -45,5 +48,9 @@ class HierarchyNotification
     }
 
     self.exists?(:conditions => conditions)
+  end
+
+  def self.average_grade(user_id)
+    where(:user_id => user_id).by_type("exercise_finalized").avg(:grade)
   end
 end

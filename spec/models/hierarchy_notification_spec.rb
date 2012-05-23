@@ -84,18 +84,19 @@ describe HierarchyNotification do
     end
 
     it "should return the grade average from user" do
-      @grade = 0
-      @user_id = 1
-      4.times do
+      grade = 0
+      user_id = 1
+      fac_times = 4
+      fac_times.times do
         exer = Factory(:hierarchy_notification_exercise_finalized,
-                      :user_id => @user_id, :grade => 5)
-        @grade += exer.grade
+                      :user_id => user_id, :grade => 5)
+        grade += exer.grade
       end
 
       Factory(:hierarchy_notification_exercise_finalized,
               :user_id => 2)
 
-      HierarchyNotification.average_grade(@user_id).should == @grade/4
+      HierarchyNotification.average_grade(user_id).should == grade/fac_times
     end
 
     it "should take notifications by period" do
@@ -116,12 +117,13 @@ describe HierarchyNotification do
 
     it "should take notifications by user" do
       noti_by_user = []
+      id = 1
       2.times do
-        noti_by_user << Factory(:hierarchy_notification, :user_id => 1)
+        noti_by_user << Factory(:hierarchy_notification, :user_id => id)
       end
-      Factory(:hierarchy_notification, :user_id => 2)
+      Factory(:hierarchy_notification, :user_id => id+1)
 
-      HierarchyNotification.by_user(1).to_set.should == noti_by_user.to_set
+      HierarchyNotification.by_user(id).to_set.should == noti_by_user.to_set
     end
   end
 

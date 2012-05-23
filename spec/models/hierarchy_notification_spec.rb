@@ -14,6 +14,7 @@ describe HierarchyNotification do
   it { should have_field(:in_response_to_type) }
   it { should have_field(:created_at) }
   it { should have_field(:updated_at) }
+  it { should have_field(:grade) }
 
   it { should validate_presence_of(:user_id) }
   it { should validate_presence_of(:type) }
@@ -90,7 +91,7 @@ describe HierarchyNotification do
       fac_times.times do
         exer = Factory(:hierarchy_notification_exercise_finalized,
                       :user_id => user_id, :grade => 5)
-        grade += exer.grade
+       grade += exer.grade
       end
 
       Factory(:hierarchy_notification_exercise_finalized,

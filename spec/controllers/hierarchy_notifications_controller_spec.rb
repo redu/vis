@@ -16,7 +16,7 @@ describe HierarchyNotificationsController do
 
     context "when authorized" do
       before do
-       @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("core-team:JOjLeRjcK")
+       request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("core-team:JOjLeRjcK")
       end
 
       it "should assign a @hierarchy variable" do
@@ -45,9 +45,9 @@ describe HierarchyNotificationsController do
 
       context "and not well formated" do
         it "should responds within code 400 Bad request" do
-          @params_error = { :hierarchy_notification => { :subject_id => 1 },
+          params_error = { :hierarchy_notification => { :subject_id => 1 },
                             :format => :json }
-          post :create, @params_error
+          post :create, params_error
           response.code.should == "400"
         end
       end

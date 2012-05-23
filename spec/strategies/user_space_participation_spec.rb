@@ -51,19 +51,19 @@ describe UserSpaceParticipation do
       end
     end
 
-    it "should return all request for helps by space, user and period" do
+    it "should return total helps by space, user and period" do
       subject.helps(@users_id[0]).should == @helps.length
     end
 
-    it "should return all request for activies by space, user and period" do
+    it "should return total activies by space, user and period" do
       subject.activities(@users_id[1]).should == @activities.length
     end
 
-    it "should return all request for answer from helps by space, user and period" do
+    it "should return total answer from helps by space, user and period" do
       subject.answered_helps(@users_id[2]).should == @answered_helps.length
     end
 
-    it "should return all request for answers from acitivies by space, user and period" do
+    it "should return total answers from acitivies by space, user and period" do
       subject.answered_activities(@users_id[0]).should == @answered_activities.length
     end
 

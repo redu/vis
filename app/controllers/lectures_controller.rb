@@ -2,8 +2,8 @@ class LecturesController < ApplicationController
 
   def participation
     participation = LectureParticipation.new(params[:lectures],
-                                              params[:date_start],
-                                              params[:date_end])
+                                             params[:date_start],
+                                             params[:date_end])
     participation.extend(LectureParticipationRepresenter)
 
     respond_to do |format|

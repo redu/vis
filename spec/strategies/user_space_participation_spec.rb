@@ -72,17 +72,18 @@ describe UserSpaceParticipation do
     end
   end
 
-  describe "building json - " do
-    it "should retrive a json with a user_id as key" do
-      subject.users_space_participation.first.should have_key(@users_id[0])
+  describe "building response - " do
+    [:user_id, :data, :space_id].each do |key|
+      it "should retrive a response with a #{key} as key" do
+        subject.users_space_participation.first[key].should_not be_nil
+      end
     end
 
     [:helps, :activities, :answered_helps,
      :answered_activities, :average_grade].each do |elem|
-      it "should retrieve a json with #{elem} as element" do
-        subject.users_space_participation.first[@users_id[0]].should have_key(elem)
+      it "should retrieve a data response with #{elem} as element" do
+        subject.users_space_participation.first[:data].should have_key(elem)
       end
     end
   end
-
 end

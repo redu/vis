@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe LecturesController do
-  context "GEt participation" do
+  context "GET participation" do
     context "when format is NOT json" do
       before do
         @params = { :lectures => ["1"," 2"],

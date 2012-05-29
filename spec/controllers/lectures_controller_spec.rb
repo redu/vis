@@ -11,7 +11,7 @@ describe LecturesController do
                     :locale => "pt-BR" }
       end
 
-      it "should return status conde 406" do
+      it "should return status code 406" do
         get :participation, @params
 
         response.status.should eq(406)

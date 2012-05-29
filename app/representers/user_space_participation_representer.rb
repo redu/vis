@@ -1,5 +1,7 @@
 module UserSpaceParticipationRepresenter
   include Roar::Representer::JSON
 
-  collection :users_space_participation, :from => :users_participation
+  property :user_id
+  property :space_id
+  property :data
 end

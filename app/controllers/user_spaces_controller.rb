@@ -1,10 +1,12 @@
 class UserSpacesController < ApplicationController
   def participation
-    participation = UserSpaceParticipation.new(params[:users_id],
-                                               params[:space_id],
-                                               params[:date_start],
-                                               params[:date_end])
-    participation.extend(UserSpaceParticipationRepresenter)
+    participation = params[:users_id].collect do |user_id|
+      UserSpaceParticipation.new(
+        user_id,
+        params[:space_id],
+        params[:date_start],
+        params[:date_end]).extend(UserSpaceParticipationRepresenter)
+    end
 
     respond_with participation
   end

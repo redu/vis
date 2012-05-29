@@ -1,27 +1,19 @@
 class UserSpaceParticipation
-  attr_reader :users_id
+  attr_reader :user_id, :space_id, :data
 
-  def initialize(users_id, space_id, date_start, date_end)
-    @users_id = users_id.collect{ |user_id| user_id.to_i }
+  def initialize(user_id, space_id, date_start, date_end)
+    @user_id = user_id.to_i
     @space_id = space_id.to_i
     @date_start = date_start
     @date_end = date_end
   end
 
-  def users_space_participation
-    @users_id.collect do |user_id|
-      { :user_id => user_id,
-        :space_id => @space_id,
-        :data => participation(user_id) }
-    end
-  end
-
-  def participation(user_id)
-    { :helps => helps(user_id),
-      :activities => activities(user_id),
-      :answered_helps => answered_helps(user_id),
-      :answered_activities => answered_activities(user_id),
-      :average_grade => average_grade(user_id) }
+  def data
+    { :helps => helps(@user_id),
+      :activities => activities(@user_id),
+      :answered_helps => answered_helps(@user_id),
+      :answered_activities => answered_activities(@user_id),
+      :average_grade => average_grade(@user_id) }
   end
 
   protected

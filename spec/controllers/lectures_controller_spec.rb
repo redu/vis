@@ -32,7 +32,7 @@ describe LecturesController do
 
       context "when format is json" do
         before do
-          @params = { :lectures => ["1, 2"],
+          @params = { :lectures => ["1", "2"],
                       :date_start => "2012-02-10",
                       :date_end => "2012-02-11",
                       :format => :json,

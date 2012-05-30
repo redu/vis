@@ -14,6 +14,7 @@ describe HierarchyNotification do
   it { should have_field(:in_response_to_type) }
   it { should have_field(:created_at) }
   it { should have_field(:updated_at) }
+  it { should have_field(:grade) }
 
   it { should validate_presence_of(:user_id) }
   it { should validate_presence_of(:type) }
@@ -24,6 +25,14 @@ describe HierarchyNotification do
       @facs = 2.times.collect do
         Factory(:hierarchy_notification, :created_at => @day)
       end
+    end
+
+    it "should take the notifications by spaces" do
+      spaces = 2.times.collect do
+        Factory(:hierarchy_notification, :space_id => 1)
+      end
+
+      HierarchyNotification.by_space(spaces.first.space_id).to_set.should eq(spaces.to_set)
     end
 
     it "should take the notifications by subjects" do
@@ -73,6 +82,49 @@ describe HierarchyNotification do
       Factory(:hierarchy_notification, :created_at => @day + 1)
 
       HierarchyNotification.by_day(@day).to_set.should eq(@facs.to_set)
+    end
+
+    it "should return the grade average from user" do
+      grade = 0
+      user_id = 1
+      fac_times = 4
+      fac_times.times do
+        exer = Factory(:hierarchy_notification_exercise_finalized,
+                      :user_id => user_id, :grade => 5)
+       grade += exer.grade
+      end
+
+      Factory(:hierarchy_notification_exercise_finalized,
+              :user_id => 2)
+
+      HierarchyNotification.average_grade(user_id).should == grade/fac_times
+    end
+
+    it "should take notifications by period" do
+      noti_by_period = []
+      noti_by_period << Factory(:hierarchy_notification,
+                                :created_at => "2011-04-18".to_date)
+      noti_by_period << Factory(:hierarchy_notification,
+                                :created_at => "2011-04-20".to_date)
+
+      Factory(:hierarchy_notification, :created_at => Time.now)
+
+      date1 = "2011-04-17".to_date
+      date2 = "2011-04-21".to_date
+
+      HierarchyNotification.by_period(date1, date2).to_set.should == noti_by_period.to_set
+
+    end
+
+    it "should take notifications by user" do
+      noti_by_user = []
+      id = 1
+      2.times do
+        noti_by_user << Factory(:hierarchy_notification, :user_id => id)
+      end
+      Factory(:hierarchy_notification, :user_id => id+1)
+
+      HierarchyNotification.by_user(id).to_set.should == noti_by_user.to_set
     end
   end
 

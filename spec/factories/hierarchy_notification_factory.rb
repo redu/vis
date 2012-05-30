@@ -57,4 +57,11 @@ FactoryGirl.define do
     hierar.sequence(:user_id){ |n| n }
     hierar.type "remove_subject_finalized"
   end
+
+  factory :hierarchy_notification_exercise_finalized,
+          :class => :hierarchy_notification do |hierar|
+    hierar.sequence(:user_id){ |n| n }
+    hierar.type "exercise_finalized"
+    hierar.sequence(:grade){ |a| a }
+  end
 end

@@ -13,10 +13,12 @@ class HierarchyNotification
   field :statusable_type
   field :in_response_to_id, :type => Integer
   field :in_response_to_type
+  field :grade, :type => Float
 
   validates_presence_of :user_id
   validates_presence_of :type
 
+  scope :by_space, lambda { |id| where(:space_id => id) }
   scope :by_subject, lambda { |id| where(:subject_id => id) }
   scope :by_lecture, lambda { |id| any_in(:lecture_id => id) }
   scope :by_type, lambda { |kind| where(:type => kind) }
@@ -24,26 +26,30 @@ class HierarchyNotification
   scope :answered, lambda { |answers|
     any_in(:status_id => answers.distinct(:in_response_to_id)).where(
       :type => "help") }
+  scope :by_user, lambda { |id| where(:user_id => id) }
+  scope :by_period, lambda { |date1, date2| where(:created_at => (date1..date2))}
 
   def self.notification_exists?(hierar)
-    @hierarchy = hierar
-
     conditions = {
-      :user_id => @hierarchy.user_id,
-      :status_id => @hierarchy.status_id,
-      :statusable_id => @hierarchy.statusable_id,
-      :statusable_type => @hierarchy.statusable_type,
-      :in_response_to_id => @hierarchy.in_response_to_id,
-      :in_response_to_type => @hierarchy.in_response_to_type,
-      :lecture_id => @hierarchy.lecture_id,
-      :subject_id => @hierarchy.subject_id,
-      :space_id => @hierarchy.space_id,
-      :course_id => @hierarchy.course_id,
-      :type => @hierarchy.type,
-      :created_at => @hierarchy.created_at,
-      :updated_at => @hierarchy.updated_at
+      :user_id => hierar.user_id,
+      :status_id => hierar.status_id,
+      :statusable_id => hierar.statusable_id,
+      :statusable_type => hierar.statusable_type,
+      :in_response_to_id => hierar.in_response_to_id,
+      :in_response_to_type => hierar.in_response_to_type,
+      :lecture_id => hierar.lecture_id,
+      :subject_id => hierar.subject_id,
+      :space_id => hierar.space_id,
+      :course_id => hierar.course_id,
+      :type => hierar.type,
+      :created_at => hierar.created_at,
+      :updated_at => hierar.updated_at
     }
 
     self.exists?(:conditions => conditions)
+  end
+
+  def self.average_grade(user_id)
+    where(:user_id => user_id).by_type("exercise_finalized").avg(:grade)
   end
 end

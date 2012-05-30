@@ -8,6 +8,9 @@ class UserSpacesController < ApplicationController
         params[:date_end]).extend(UserSpaceParticipationRepresenter)
     end
 
-    respond_with participation
+    respond_to do |format|
+      format.json { render :json => participation,
+                    :callback => params[:callback] }
+    end
   end
 end

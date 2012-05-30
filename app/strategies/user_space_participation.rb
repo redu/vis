@@ -9,11 +9,11 @@ class UserSpaceParticipation
   end
 
   def data
-    { :helps => helps(@user_id),
-      :activities => activities(@user_id),
-      :answered_helps => answered_helps(@user_id),
-      :answered_activities => answered_activities(@user_id),
-      :average_grade => average_grade(@user_id) }
+    { :helps => helps(user_id),
+      :activities => activities(user_id),
+      :answered_helps => answered_helps(user_id),
+      :answered_activities => answered_activities(user_id),
+      :average_grade => average_grade(user_id) }
   end
 
   protected

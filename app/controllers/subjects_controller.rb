@@ -19,4 +19,5 @@ class SubjectsController < ApplicationController
                     :callback => params[:callback] }
     end
   end
+
 end

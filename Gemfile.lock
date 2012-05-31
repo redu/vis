@@ -86,6 +86,7 @@ GEM
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-ssh (2.3.0)
+    newrelic_rpm (3.0.1)
     nokogiri (1.5.2)
     polyglot (0.3.3)
     rack (1.4.1)
@@ -175,6 +176,7 @@ DEPENDENCIES
   mongoid (~> 2.4)
   mongoid-rspec
   mongolicious
+  newrelic_rpm (= 3.0.1)
   rails (= 3.2.1)
   roar-rails
   rspec-rails (~> 2.9.0)

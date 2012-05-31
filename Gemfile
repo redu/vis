@@ -28,6 +28,10 @@ group :test, :development do
   gem "shoulda-matchers"
 end
 
+group :production do
+  gem 'newrelic_rpm', '3.0.1'
+end
+
 gem 'jquery-rails'
 gem 'roar-rails'
 gem 'mongolicious'

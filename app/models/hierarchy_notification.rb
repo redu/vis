@@ -22,12 +22,14 @@ class HierarchyNotification
   scope :by_subject, lambda { |id| where(:subject_id => id) }
   scope :by_lecture, lambda { |id| any_in(:lecture_id => id) }
   scope :by_type, lambda { |kind| where(:type => kind) }
-  scope :by_day, lambda { |day| where(:created_at.gte => day, :created_at.lt => day + 1)}
+  scope :by_day, lambda { |day| where(:created_at.gte => day,
+                                      :created_at.lt => day + 1)}
   scope :answered, lambda { |answers|
     any_in(:status_id => answers.distinct(:in_response_to_id)).where(
       :type => "help") }
   scope :by_user, lambda { |id| where(:user_id => id) }
-  scope :by_period, lambda { |date1, date2| where(:created_at => (date1..date2))}
+  scope :by_period, lambda { |date1, date2| where(
+    :created_at => (date1..date2))}
 
   def self.notification_exists?(hierar)
     conditions = {

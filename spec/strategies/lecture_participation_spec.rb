@@ -94,25 +94,47 @@ describe LectureParticipation do
 
   context "executing queries" do
     it "should take all helps" do
-      subject.helps.to_set.should eq(@helps.to_set)
+      subject.notifications.by_type("help").to_set.should \
+        eq(@helps.to_set)
     end
 
     it "should take all activities" do
-      subject.activities.to_set.should eq(@activities.to_set)
+      subject.notifications.by_type("activity").to_set.should \
+        eq(@activities.to_set)
     end
 
     it "should take all answers from activities" do
-      subject.answered_activities.to_set.should eq(@answers_activity.to_set)
+      subject.notifications.by_type("answered_activity").to_set.should \
+        eq(@answers_activity.to_set)
     end
 
     it "should take all answeres from helps" do
-      subject.answered_helps.to_set.should eq(@answers_help.to_set)
+      subject.notifications.by_type("answered_help").to_set.should \
+        eq(@answers_help.to_set)
     end
 
     it "should take all lecture visualization" do
       pending "visualizations isn't at db" do
         subject.visualizations.to_set.should eq(@visualizations)
       end
+    end
+  end
+
+  context "get methods" do
+    it "helps" do
+      subject.helps.should eq(@helps.length)
+    end
+
+    it "activities" do
+      subject.activities.should eq(@activities.length)
+    end
+
+    it "answered activities" do
+      subject.answered_activities.should eq(@answers_activity.length)
+    end
+
+    it "answered helps" do
+      subject.answered_helps.should eq(@answers_help.length)
     end
   end
 

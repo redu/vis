@@ -19,19 +19,19 @@ class LectureParticipation
   end
 
   def helps
-    notifications.by_type("help")
+    notifications.by_type("help").count
   end
 
   def activities
-    notifications.by_type("activity")
+    notifications.by_type("activity").count
   end
 
   def answered_activities
-    notifications.by_type("answered_activity")
+    notifications.by_type("answered_activity").count
   end
 
   def answered_helps
-    notifications.by_type("answered_help")
+    notifications.by_type("answered_help").count
   end
 
   def helps_by_day

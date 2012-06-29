@@ -9,39 +9,53 @@ describe UserSpaceParticipation do
     test_date = "2012-01-05".to_date
 
     @helps = []
-    2.times do
-     @helps << Factory(:hierarchy_notification_help, :space_id => @space_id,
-                       :created_at => test_date, :user_id => @user_id)
-    end
-
     @activities = []
+    @answered_helps = []
+    @answered_activities = []
+    @avg_grade = []
+
     2.times do
+      @helps << Factory(:hierarchy_notification_help, :space_id => @space_id,
+                        :created_at => test_date, :user_id => @user_id)
       @activities << Factory(:hierarchy_notification_activity,
                              :space_id => @space_id,
                              :created_at => test_date, :user_id => @user_id)
-    end
-
-    @answered_helps = []
-    2.times do
       @answered_helps << Factory(:hierarchy_notification_answered_help,
                                  :space_id => @space_id,
                                  :created_at => test_date,
                                  :user_id => @user_id)
-    end
-
-    @answered_activities = []
-    2.times do
       @answered_activities << Factory(:hierarchy_notification_answered_activity,
                                       :space_id => @space_id,
                                       :created_at => test_date,
                                       :user_id => @user_id)
-    end
+      @avg_grade << Factory(:hierarchy_notification, :space_id => @space_id,
+                            :created_at => test_date, :user_id => @user_id,
+                            :type => "exercise_finalized", :grade => 5)
 
-    @avg_grade = []
-    2.times do
-     @avg_grade << Factory(:hierarchy_notification, :space_id => @space_id,
-                           :created_at => test_date, :user_id => @user_id,
-                           :type => "exercise_finalized", :grade => 5)
+      # Destruindo status
+      destroy = Factory(:hierarchy_notification_help, :space_id => @space_id,
+                        :created_at => test_date, :user_id => @user_id)
+      Factory(:hierarchy_notification,  :space_id => @space_id,
+              :created_at => test_date, :user_id => @user_id,
+              :status_id => destroy.status_id, :type => "remove_help")
+
+      destroy = Factory(:hierarchy_notification_activity, :space_id => @space_id,
+                        :created_at => test_date, :user_id => @user_id)
+      Factory(:hierarchy_notification,  :space_id => @space_id,
+              :created_at => test_date, :user_id => @user_id,
+              :status_id => destroy.status_id, :type => "remove_activity")
+
+      destroy = Factory(:hierarchy_notification_answered_help, :space_id => @space_id,
+                        :created_at => test_date, :user_id => @user_id)
+      Factory(:hierarchy_notification,  :space_id => @space_id,
+              :created_at => test_date, :user_id => @user_id,
+              :status_id => destroy.status_id, :type => "remove_answered_help")
+
+      destroy = Factory(:hierarchy_notification_answered_activity, :space_id => @space_id,
+                        :created_at => test_date, :user_id => @user_id)
+      Factory(:hierarchy_notification, :space_id => @space_id,
+              :created_at => test_date, :user_id => @user_id,
+              :status_id => destroy.status_id, :type => "remove_answered_activity")
     end
   end
 

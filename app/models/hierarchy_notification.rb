@@ -31,6 +31,12 @@ class HierarchyNotification
   scope :by_period, lambda { |date1, date2| where(
     :created_at => (date1..date2))}
 
+  # Coleta Statuses que não foram destruídos
+  scope :not_removed, lambda { |type| where(
+    :type => type).where(
+      :status_id.nin => where(
+        :type => "remove_#{type}").collect{ |s| s.status_id }) }
+
   def self.notification_exists?(hierar)
     conditions = {
       :user_id => hierar.user_id,

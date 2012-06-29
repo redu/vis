@@ -7,13 +7,30 @@ describe SubjectParticipation do
     @answers_help = []
     @finalized = []
     @enrollment = []
+    @notifications = []
 
     3.times do
       h = Factory(:hierarchy_notification_help, :subject_id => @id)
       @helps << h
       @answers_help << Factory(:hierarchy_notification_answered_help,
-                          :subject_id => h.subject_id,
-                          :in_response_to_id => h.status_id)
+                               :subject_id => h.subject_id,
+                               :in_response_to_id => h.status_id)
+
+      # Destruindo help
+      destroy = Factory(:hierarchy_notification_help, :subject_id => @id)
+      @notifications << destroy
+      @notifications << Factory(:hierarchy_notification,
+                                :subject_id => @id,
+                                :status_id => destroy.status_id,
+                                :type => "remove_help")
+
+      # Destruindo answered help
+      destroy = Factory(:hierarchy_notification_answered_help, :subject_id => @id)
+      @notifications << destroy
+      @notifications << Factory(:hierarchy_notification,
+                                :subject_id => @id,
+                                :status_id => destroy.status_id,
+                                :type => "remove_answered_help")
     end
 
     2.times do
@@ -23,15 +40,19 @@ describe SubjectParticipation do
                              :subject_id => @id)
     end
 
+    # Pedido de ajuda não respondido
     @helps_n = [Factory(:hierarchy_notification_help, :subject_id => @id)]
+
+    # Remoções
     @remove_enrollment = [Factory(:hierarchy_notification_remove_enrollment,
                                 :subject_id => @id)]
     @remove_finalized = [Factory(:hierarchy_notification_remove_subject_finalized,
                                 :subject_id => @id)]
 
-    @notifications = @helps_n + @helps + @answers_help + @remove_finalized
+    @notifications += @helps_n + @helps + @answers_help + @remove_finalized
     @notifications += @finalized + @enrollment + @remove_enrollment
 
+    # Notificações fora dos subject em id
     2.times do
       h = Factory(:hierarchy_notification_help, :subject_id => 2)
       Factory(:hierarchy_notification_answered_help,
@@ -71,18 +92,18 @@ describe SubjectParticipation do
 
   context "executing queries" do
     it "should take all helps" do
-      subject.notifications.by_type("help").to_set.should \
+      subject.notifications.not_removed("help").to_set.should \
         eq((@helps + @helps_n).to_set)
     end
 
     it "should take all answers from helps" do
-      subject.notifications.by_type("answered_help").to_set.should \
+      subject.notifications.not_removed("answered_help").to_set.should \
         eq(@answers_help.to_set)
     end
 
     it "should take all helps with answers from helps" do
-      ans = subject.notifications.by_type("answered_help")
-      subject.notifications.by_type("help").answered(ans).to_set == @helps.to_set
+      ans = subject.notifications.not_removed("answered_help")
+      subject.notifications.not_removed("help").answered(ans).to_set == @helps.to_set
     end
 
     it "should take all subjects finalized" do

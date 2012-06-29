@@ -11,6 +11,13 @@ FactoryGirl.define do
     hierar.type "activity"
   end
 
+  factory :hierarchy_notification_remove_activity,
+          :class => :hierarchy_notification do |hierar|
+    hierar.sequence(:user_id){ |n| n }
+    hierar.sequence(:status_id){ |p| p }
+    hierar.type "remove_activity"
+  end
+
   factory :hierarchy_notification_help,
     :class => :hierarchy_notification do |hierar|
       hierar.sequence(:user_id){ |n| n }

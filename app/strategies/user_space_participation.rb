@@ -19,23 +19,26 @@ class UserSpaceParticipation
   protected
 
   def helps(user_id)
-    HierarchyNotification.by_type("help").by_user(user_id).
-      by_space(@space_id).by_period(@date_start, @date_end).count
+    HierarchyNotification.by_user(user_id).by_space(@space_id).
+      by_period(@date_start, @date_end).not_removed("help").count
   end
 
   def activities(user_id)
-    HierarchyNotification.by_type("activity").by_user(user_id).
-      by_space(@space_id).by_period(@date_start, @date_end).count
+    HierarchyNotification.by_user(user_id).by_space(@space_id).
+      by_period(@date_start, @date_end).
+      not_removed("activity").count
   end
 
   def answered_helps(user_id)
-    HierarchyNotification.by_type("answered_help").by_user(user_id).
-      by_space(@space_id).by_period(@date_start, @date_end).count
+    HierarchyNotification.by_user(user_id).by_space(@space_id).
+      by_period(@date_start, @date_end).
+      not_removed("answered_help").count
   end
 
   def answered_activities(user_id)
-    HierarchyNotification.by_type("answered_activity").by_user(user_id).
-      by_space(@space_id).by_period(@date_start, @date_end).count
+    HierarchyNotification.by_user(user_id).by_space(@space_id).
+      by_period(@date_start, @date_end).
+      not_removed("answered_activity").count
   end
 
   def average_grade(user_id)

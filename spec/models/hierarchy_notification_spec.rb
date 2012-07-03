@@ -32,7 +32,8 @@ describe HierarchyNotification do
         Factory(:hierarchy_notification, :space_id => 1)
       end
 
-      HierarchyNotification.by_space(spaces.first.space_id).to_set.should eq(spaces.to_set)
+      HierarchyNotification.by_space(spaces.first.space_id).to_set.should \
+        eq(spaces.to_set)
     end
 
     it "should take the notifications by subjects" do
@@ -135,9 +136,9 @@ describe HierarchyNotification do
         noti << Factory(:hierarchy_notification_activity)
       end
 
-      Factory(:hierarchy_notification_remove_activity,
+      Factory(:hierarchy_notification, :type => "remove_activity",
               :status_id => noti[0].status_id)
-      Factory(:hierarchy_notification_remove_activity,
+      Factory(:hierarchy_notification, :type => "remove_activity",
               :status_id => noti[1].status_id)
 
       HierarchyNotification.not_removed("activity").first.should \

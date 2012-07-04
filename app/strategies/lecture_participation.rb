@@ -19,19 +19,19 @@ class LectureParticipation
   end
 
   def helps
-    notifications.not_removed("help").count
+    notifications.status_not_removed("help").count
   end
 
   def activities
-    notifications.not_removed("activity").count
+    notifications.status_not_removed("activity").count
   end
 
   def answered_activities
-    notifications.not_removed("answered_activity").count
+    notifications.status_not_removed("answered_activity").count
   end
 
   def answered_helps
-    notifications.not_removed("answered_help").count
+    notifications.status_not_removed("answered_help").count
   end
 
   # Filtrados por dia
@@ -56,7 +56,7 @@ class LectureParticipation
     daily = []
 
     (0..(self.end - self.start)).each do
-      daily << notifications.not_removed(type).by_day(start).count
+      daily << notifications.status_not_removed(type).by_day(start).count
       start += 1
     end
 

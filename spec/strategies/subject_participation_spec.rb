@@ -92,18 +92,18 @@ describe SubjectParticipation do
 
   context "executing queries" do
     it "should take all helps" do
-      subject.notifications.not_removed("help").to_set.should \
+      subject.notifications.status_not_removed("help").to_set.should \
         eq((@helps + @helps_n).to_set)
     end
 
     it "should take all answers from helps" do
-      subject.notifications.not_removed("answered_help").to_set.should \
+      subject.notifications.status_not_removed("answered_help").to_set.should \
         eq(@answers_help.to_set)
     end
 
     it "should take all helps with answers from helps" do
-      ans = subject.notifications.not_removed("answered_help")
-      subject.notifications.not_removed("help").answered(ans).to_set == @helps.to_set
+      ans = subject.notifications.status_not_removed("answered_help")
+      subject.notifications.status_not_removed("help").answered(ans).to_set == @helps.to_set
     end
 
     it "should take all subjects finalized" do

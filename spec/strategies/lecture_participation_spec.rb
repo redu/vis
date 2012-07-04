@@ -3,6 +3,7 @@ require 'spec_helper'
 describe LectureParticipation do
   before do
     @id = [1, 2]
+    @out_id = 3
     @helps = []
     @activities = []
     @answers_help = []
@@ -41,8 +42,8 @@ describe LectureParticipation do
                                :created_at => @day)
 
       # Notificações fora das disciplinas de @id
-      Factory(:hierarchy_notification_help, :lecture_id => 3)
-      Factory(:hierarchy_notification_answered_help, :lecture_id => 3)
+      Factory(:hierarchy_notification_help, :lecture_id => @out_id)
+      Factory(:hierarchy_notification_answered_help, :lecture_id => @out_id)
     end
 
     2.times do
@@ -75,8 +76,8 @@ describe LectureParticipation do
                                    :created_at => @day)
 
       # Notificações fora das disciplinas de @id
-      Factory(:hierarchy_notification_activity, :lecture_id => 3)
-      Factory(:hierarchy_notification_answered_activity, :lecture_id => 3)
+      Factory(:hierarchy_notification_activity, :lecture_id => @out_id)
+      Factory(:hierarchy_notification_answered_activity, :lecture_id => @out_id)
     end
 
     # Participação apenas em @id[0]
@@ -134,22 +135,22 @@ describe LectureParticipation do
 
   context "executing queries" do
     it "should take all helps" do
-      subject.notifications.not_removed("help").to_set.should \
+      subject.notifications.status_not_removed("help").to_set.should \
         eq(@helps.to_set)
     end
 
     it "should take all activities" do
-      subject.notifications.not_removed("activity").to_set.should \
+      subject.notifications.status_not_removed("activity").to_set.should \
         eq(@activities.to_set)
     end
 
     it "should take all answers from activities" do
-      subject.notifications.not_removed("answered_activity").to_set.should \
+      subject.notifications.status_not_removed("answered_activity").to_set.should \
         eq(@answers_activity.to_set)
     end
 
     it "should take all answeres from helps" do
-      subject.notifications.not_removed("answered_help").to_set.should \
+      subject.notifications.status_not_removed("answered_help").to_set.should \
         eq(@answers_help.to_set)
     end
 

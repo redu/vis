@@ -12,16 +12,16 @@ class SubjectParticipation
   end
 
   def helps
-    self.notifications.not_removed("help").count
+    self.notifications.status_not_removed("help").count
   end
 
   def answered_helps
-    self.notifications.not_removed("answered_help").count
+    self.notifications.status_not_removed("answered_help").count
   end
 
   def helps_answered
-    help = self.notifications.not_removed("help")
-    ans = self.notifications.not_removed("answered_help")
+    help = self.notifications.status_not_removed("help")
+    ans = self.notifications.status_not_removed("answered_help")
     help.answered(ans).count
   end
 

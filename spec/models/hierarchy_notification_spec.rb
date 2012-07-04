@@ -64,6 +64,7 @@ describe HierarchyNotification do
       helps =[]
       id = 1
       Factory(:hierarchy_notification_help, :status_id => 3)
+
       2.times do
         h = Factory(:hierarchy_notification_help,
                     :status_id => id)
@@ -141,7 +142,7 @@ describe HierarchyNotification do
       Factory(:hierarchy_notification, :type => "remove_activity",
               :status_id => noti[1].status_id)
 
-      HierarchyNotification.not_removed("activity").first.should \
+      HierarchyNotification.status_not_removed("activity").first.should \
         eq(noti[2])
     end
   end

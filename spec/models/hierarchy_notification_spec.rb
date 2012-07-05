@@ -32,7 +32,8 @@ describe HierarchyNotification do
         Factory(:hierarchy_notification, :space_id => 1)
       end
 
-      HierarchyNotification.by_space(spaces.first.space_id).to_set.should eq(spaces.to_set)
+      HierarchyNotification.by_space(spaces.first.space_id).to_set.should \
+        eq(spaces.to_set)
     end
 
     it "should take the notifications by subjects" do
@@ -63,6 +64,7 @@ describe HierarchyNotification do
       helps =[]
       id = 1
       Factory(:hierarchy_notification_help, :status_id => 3)
+
       2.times do
         h = Factory(:hierarchy_notification_help,
                     :status_id => id)
@@ -112,7 +114,8 @@ describe HierarchyNotification do
       date1 = "2011-04-17".to_date
       date2 = "2011-04-21".to_date
 
-      HierarchyNotification.by_period(date1, date2).to_set.should == noti_by_period.to_set
+      HierarchyNotification.by_period(date1, date2).to_set.should \
+        eq(noti_by_period.to_set)
 
     end
 
@@ -126,8 +129,23 @@ describe HierarchyNotification do
 
       HierarchyNotification.by_user(id).to_set.should == noti_by_user.to_set
     end
-  end
 
+    it "notifications not removed should be taken" do
+      noti = []
+
+      3.times do
+        noti << Factory(:hierarchy_notification_activity)
+      end
+
+      Factory(:hierarchy_notification, :type => "remove_activity",
+              :status_id => noti[0].status_id)
+      Factory(:hierarchy_notification, :type => "remove_activity",
+              :status_id => noti[1].status_id)
+
+      HierarchyNotification.status_not_removed("activity").first.should \
+        eq(noti[2])
+    end
+  end
 
   context "verify if a HierarchyNotification" do
     before do

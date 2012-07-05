@@ -35,7 +35,7 @@ class HierarchyNotification
   scope :status_not_removed, lambda { |type| where(
     :type => type).where(
       :status_id.nin => where(
-        :type => "remove_#{type}").map(&:status_id)) }
+        :type => "remove_#{type}").only(:status_id).map(&:status_id)) }
 
   def self.notification_exists?(hierar)
     conditions = {

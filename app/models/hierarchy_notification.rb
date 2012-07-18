@@ -23,7 +23,7 @@ class HierarchyNotification
   scope :by_lecture, lambda { |id| any_in(:lecture_id => id) }
   scope :by_type, lambda { |kind| where(:type => kind) }
   scope :by_day, lambda { |day| where(:created_at.gte => day,
-                                      :created_at.lt => day + 1)}
+                                      :created_at.lt => day + 1) }
   scope :answered, lambda { |answers|
     any_in(:status_id => answers.distinct(:in_response_to_id)).where(
       :type => "help") }
@@ -57,7 +57,12 @@ class HierarchyNotification
     self.exists?(:conditions => conditions)
   end
 
-  def self.average_grade(user_id)
-    where(:user_id => user_id).by_type("exercise_finalized").avg(:grade)
+  def self.average_grade(cond = {:type => "exercise_finalized"})
+    collection.group({
+      :key => :user_id,
+      :cond => cond,
+      :reduce => "function(d, o){o.sum += d.grade; o.count++;}",
+      :initial => {:sum => 0, :count => 0},
+      :finalize => "function(out){out.avg = out.sum/out.count}" })
   end
 end

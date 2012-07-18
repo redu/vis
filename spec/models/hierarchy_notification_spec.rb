@@ -86,7 +86,7 @@ describe HierarchyNotification do
       HierarchyNotification.by_day(@day).to_set.should eq(@facs.to_set)
     end
 
-    it "should return the grade average from user" do
+    it "should return the grade average grouped by user" do
       grade = 0
       user_id = 1
       fac_times = 4
@@ -99,7 +99,12 @@ describe HierarchyNotification do
       Factory(:hierarchy_notification_exercise_finalized,
               :user_id => 2)
 
-      HierarchyNotification.average_grade(user_id).should == grade/fac_times
+      avg = HierarchyNotification.average_grade
+      avg.each do |item|
+        if item["user_id"] == user_id
+          item["avg"].should == grade/fac_times
+        end
+      end
     end
 
     it "should take notifications by period" do

@@ -38,62 +38,25 @@ class LectureParticipation
   def helps_by_day
     cond = notifications.status_not_removed("help").selector
 
-    help = HierarchyNotification.daily(cond)
-
-    hel = Hash.new
-    help.map { |h| hel[h["date"]] = { "helps" => h["count"] }}
-
-    order(hel, "helps")
+    build_array(cond, "helps")
   end
 
   def activities_by_day
     cond = notifications.status_not_removed("activity").selector
 
-    activity = HierarchyNotification.daily(cond)
-    acti = Hash.new
-    activity.map { |h| acti[h["date"]] =
-                   { "activities" => h["count"] }}
-
-    order(acti, "activities")
+    build_array(cond, "activities")
   end
 
   def answered_helps_by_day
     cond = notifications.status_not_removed("answered_help").selector
 
-    ans_hel = HierarchyNotification.daily(cond)
-
-    ans = Hash.new
-    ans_hel.map { |h| ans[h["date"]] =
-                  { "answered_helps" => h["count"] }}
-
-    order(ans, "answered_helps")
+    build_array(cond, "answered_helps")
   end
 
   def answered_activities_by_day
     cond = notifications.status_not_removed("answered_activity").selector
 
-    ans_activity = HierarchyNotification.daily(cond)
-
-    ans = Hash.new
-    ans_activity.map { |h| ans[h["date"]] =
-                       { "answered_activities" => h["count"] }}
-
-    order(ans, "answered_activities")
-  end
-
-  def order(hash, type)
-    start = self.start
-    daily = []
-
-    (0..(self.end - self.start)).each do
-      day = start.strftime("%Y-%-m-%-d")
-      res =  hash[day] ? hash[day][type] : 0
-
-      daily << res
-      start += 1
-    end
-
-    daily
+    build_array(cond, "answered_activities")
   end
 
   def days
@@ -102,6 +65,26 @@ class LectureParticipation
 
     (0..(self.end - self.start)).each do
       daily << start.strftime("%-d/%m")
+      start += 1
+    end
+
+    daily
+  end
+
+  def build_array(cond, type)
+    statuses = HierarchyNotification.daily(cond)
+
+    hash = Hash.new
+    statuses.map { |h| hash[h["date"]] = { type => h["count"] }}
+
+    start = self.start
+    daily = []
+
+    (0..(self.end - self.start)).each do
+      day = start.strftime("%Y-%-m-%-d")
+      res =  hash[day] ? hash[day][type] : 0
+
+      daily << res
       start += 1
     end
 

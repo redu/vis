@@ -27,9 +27,8 @@ class HierarchyNotification
   scope :answered, lambda { |answers|
     any_in(:status_id => answers.distinct(:in_response_to_id)).where(
       :type => "help") }
-  scope :by_user, lambda { |id| where(:user_id => id) }
   scope :by_period, lambda { |date1, date2| where(
-    :created_at => (date1..date2))}
+    :created_at => (date1..date2)) }
 
   # Coleta Statuses que não foram destruídos
   scope :status_not_removed, lambda { |type| where(
@@ -57,12 +56,26 @@ class HierarchyNotification
     self.exists?(:conditions => conditions)
   end
 
-  def self.average_grade(cond = {:type => "exercise_finalized"})
+  def self.average_grade(cond = { :type => "exercise_finalized" })
+    # Usa o collection para inserir a opção finalize no group
     collection.group({
       :key => :user_id,
       :cond => cond,
-      :reduce => "function(d, o){o.sum += d.grade; o.count++;}",
-      :initial => {:sum => 0, :count => 0},
-      :finalize => "function(out){out.avg = out.sum/out.count}" })
+      :reduce => "function(d, o) { o.sum += d.grade; o.count++; }",
+      :initial => { :sum => 0, :count => 0 },
+      :finalize => "function(out) { out.avg = out.sum/out.count }" })
+  end
+
+  def self.daily(cond = {})
+    # Usa o collection para inserir a opção keyf visando agrupar apenas
+    # por dia e não por Timestamp(:created_at)
+    collection.group({
+      :keyf => "function(doc) { d = new Date(doc.created_at);
+                  return { date: d.getFullYear() + '-' + (d.getMonth() + 1) +
+                            '-' + d.getDate() }; }",
+      :cond => cond,
+      :reduce => "function(d, o) { o.count++; }",
+      :initial => { :count => 0 },
+    })
   end
 end

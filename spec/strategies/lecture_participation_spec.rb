@@ -12,6 +12,7 @@ describe LectureParticipation do
     @id_notifications = []
 
     @day = Date.today
+    @day_string = @day.strftime("%Y-%-m-%-d")
 
     3.times do
       h = Factory(:hierarchy_notification_help, :lecture_id => @id[0],
@@ -145,8 +146,8 @@ describe LectureParticipation do
     end
 
     it "should take all answers from activities" do
-      subject.notifications.status_not_removed("answered_activity").to_set.should \
-        eq(@answers_activity.to_set)
+      subject.notifications.status_not_removed("answered_activity").to_set.
+        should eq(@answers_activity.to_set)
     end
 
     it "should take all answeres from helps" do
@@ -185,11 +186,10 @@ describe LectureParticipation do
       lp.notifications.to_set.should eq(@id_notifications.to_set)
     end
 
-    context "by day" do
+    context "daily -" do
       before do
         h = Factory(:hierarchy_notification_help,
-                    :lecture_id => @id[0],
-                    :created_at => @day + 1)
+                    :lecture_id => @id[0], :created_at => @day + 1)
 
         Factory(:hierarchy_notification_answered_help,
                 :lecture_id => h.lecture_id,
@@ -205,21 +205,136 @@ describe LectureParticipation do
                 :created_at => @day + 1)
       end
 
-      it "helps" do
-        subject.helps_by_day.last.should eq(@total_helps_count)
+      context "helps -" do
+        before do
+          @cond = HierarchyNotification.by_lecture([@id[0]]).
+            status_not_removed("help").selector
+        end
+
+        it "conditions should have type help for group by" do
+          @cond[:type].should eq("help")
+        end
+
+        it "should aggregate helps in lecture by day" do
+          help = HierarchyNotification.daily(@cond)
+
+          help.should include({ "date" => @day_string,
+                                "count" => @total_helps_count })
+        end
+
+        it "should create a hash by day with helps" do
+          help = HierarchyNotification.daily(@cond)
+
+          hash = Hash.new
+          help.map { |h| hash[h["date"]] = { "helps" => h["count"] }}
+
+          hash.should include({ @day_string =>
+                                { "helps" => @total_helps_count }})
+        end
+
+        it "should return total helps ordered by day" do
+          subject.helps_by_day.last.should eq(@total_helps_count)
+        end
       end
 
-      it "activities" do
-        subject.activities_by_day.last.should eq(@activities_count)
+      context "activities -" do
+        before do
+          @cond = HierarchyNotification.by_lecture([@id[0]]).
+            status_not_removed("activity").selector
+        end
+
+        it "conditions should have type activity for group by" do
+          @cond[:type].should eq("activity")
+        end
+
+        it "should aggregate activities in lecture by day" do
+          activity = HierarchyNotification.daily(@cond)
+
+          activity.should include({ "date" => @day_string,
+                                    "count" => @activities_count })
+        end
+
+        it "should create a hash by day with activities" do
+          activity = HierarchyNotification.daily(@cond)
+
+          hash = Hash.new
+          activity.map { |h| hash[h["date"]] = { "activities" => h["count"] }}
+
+          hash.should include({ @day_string =>
+                                { "activities" => @activities_count }})
+        end
+
+        it "should return total activities ordered by day" do
+          subject.activities_by_day.last.should eq(@activities_count)
+        end
       end
 
-      it "answered activities" do
-        subject.answered_activities_by_day.last.should \
-          eq(@answers_activity_count)
+      context "answered helps -" do
+        before do
+          @cond = HierarchyNotification.by_lecture([@id[0]]).
+            status_not_removed("answered_help").selector
+        end
+
+        it "conditions should have type answered help for group by" do
+          @cond[:type].should eq("answered_help")
+        end
+
+        it "should aggregate answered helps in lecture by day" do
+          ans_help = HierarchyNotification.daily(@cond)
+
+          ans_help.should include({ "date" => @day_string,
+                                    "count" => @answers_help_count })
+        end
+
+        it "should create a hash by day with answered helps" do
+          ans_help = HierarchyNotification.daily(@cond)
+
+          hash = Hash.new
+          ans_help.map { |h| hash[h["date"]] =
+                         { "answered_helps" => h["count"] }}
+
+          hash.should include({ @day_string =>
+                                    { "answered_helps" => @answers_help_count }})
+        end
+
+        it "should return total answered helps ordered by day" do
+          subject.answered_helps_by_day.last.should eq(@answers_help_count)
+        end
       end
 
-      it "answered helps" do
-        subject.answered_helps_by_day.last.should eq(@answers_help_count)
+      context "answered activities -" do
+        before do
+          @cond = HierarchyNotification.by_lecture([@id[0]]).
+            status_not_removed("answered_activity").selector
+        end
+
+        it "conditions should have type activity for group by" do
+          @cond[:type].should eq("answered_activity")
+        end
+
+        it "should aggregate answered activities in lecture by day" do
+          ans_activity = HierarchyNotification.daily(@cond)
+
+          ans_activity.should include({ "date" => @day_string,
+                                        "count" => @answers_activity_count })
+        end
+
+        it "should create a hash by day with answered activities" do
+          ans_activity = HierarchyNotification.daily(@cond)
+
+          hash = Hash.new
+          ans_activity.map { |h| hash[h["date"]] =
+                             { "answered_activities" => h["count"] }}
+
+          hash.should include({ @day_string =>
+                                { "answered_activities" =>
+                                  @answers_activity_count }})
+        end
+
+        it "should return total answered activities ordered by day" do
+          subject.answered_activities_by_day.last.should \
+            eq(@answers_activity_count)
+        end
       end
 
       it "days" do

@@ -80,12 +80,6 @@ describe HierarchyNotification do
       HierarchyNotification.answered(answers).to_set.should eq(helps.to_set)
     end
 
-    it "should take notifications by day" do
-      Factory(:hierarchy_notification, :created_at => @day + 1)
-
-      HierarchyNotification.by_day(@day).to_set.should eq(@facs.to_set)
-    end
-
     it "should return the grade average grouped by user" do
       grade = 0
       user_id = 1

@@ -4,6 +4,7 @@ class SubjectsController < ApplicationController
     activity = SubjectParticipation.new(params[:subject_id])
     activity.extend(SubjectParticipationRepresenter)
 
+    debugger
     respond_to do |format|
       format.json { render :json => activity,
                     :callback => params[:callback] }

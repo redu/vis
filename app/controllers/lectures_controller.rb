@@ -1,5 +1,6 @@
 class LecturesController < ApplicationController
   def participation
+    debugger
     part = LectureParticipation.new(params[:lectures],
                                     params[:date_start],
                                     params[:date_end])

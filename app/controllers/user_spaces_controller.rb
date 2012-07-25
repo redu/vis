@@ -6,9 +6,9 @@ class UserSpacesController < ApplicationController
       params[:date_start],
       params[:date_end]).response
 
-      respond_to do |format|
-        format.json { render :json => part,
-                      :callback => params[:callback] }
-      end
+    respond_to do |format|
+      format.json { render :json => part,
+                    :callback => params[:callback] }
+    end
   end
 end

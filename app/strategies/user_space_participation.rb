@@ -39,50 +39,31 @@ class UserSpaceParticipation
   protected
 
   def helps
-    helps = HierarchyNotification.by_space(@space_id).
-      by_period(@date_start, @date_end).status_not_removed("help").
-      only(:user_id).aggregate
-
-    @helps = Hash.new
-    helps.map { |h| @helps[h["user_id"].to_i] = {"helps" => h["count"].to_i }}
-
-    @helps
+    @helps = build_hash("help", "helps")
   end
 
   def activities
-    acti = HierarchyNotification.by_space(@space_id).
-      by_period(@date_start, @date_end).status_not_removed("activity").
-      only(:user_id).aggregate
-
-    @activities = Hash.new
-    acti.map { |h| @activities[h["user_id"].to_i] =
-               { "activities" => h["count"].to_i }}
-
-    @activities
+    @activities = build_hash("activity", "activities")
   end
 
   def answered_helps
-    ans_helps = HierarchyNotification.by_space(@space_id).
-      by_period(@date_start, @date_end).
-      status_not_removed("answered_help").only(:user_id).aggregate
-
-    @answered_helps = Hash.new
-    ans_helps.map { |h| @answered_helps[h["user_id"].to_i] =
-                    { "answered_helps" => h["count"].to_i }}
-
-    @answered_helps
+    @answered_helps = build_hash("answered_help", "answered_helps")
   end
 
   def answered_activities
-    ans_acti = HierarchyNotification.by_space(@space_id).
+    @answered_activities = build_hash("answered_activity",
+                                      "answered_activities")
+  end
+
+  def build_hash(type, key)
+    status =  HierarchyNotification.by_space(@space_id).
       by_period(@date_start, @date_end).
-      status_not_removed("answered_activity").only(:user_id).aggregate
+      status_not_removed(type).only(:user_id).aggregate
 
-    @answered_activities = Hash.new
-    ans_acti.map { |h| @answered_activities[h["user_id"].to_i] =
-                   { "answered_activities" => h["count"].to_i }}
+    hash = Hash.new
+    status.map { |h| hash[h["user_id"].to_i] = { key => h["count"].to_i }}
 
-    @answered_activities
+    hash
   end
 
   def average_grade

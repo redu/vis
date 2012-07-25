@@ -12,7 +12,6 @@ describe LectureParticipation do
     @id_notifications = []
 
     @day = Date.today
-    @day_string = @day.strftime("%Y-%-m-%-d")
 
     3.times do
       h = Factory(:hierarchy_notification_help, :lecture_id => @id[0],
@@ -258,33 +257,11 @@ describe LectureParticipation do
         end
       end
 
-      context "building array" do
-        before do
-          @cond = HierarchyNotification.by_lecture([@id[0]]).
-            status_not_removed("help").selector
-        end
+      it "should ordering an array of statuses by day" do
+        @cond = HierarchyNotification.by_lecture([@id[0]]).
+          status_not_removed("help").selector
 
-        it "should aggregate statuses in lecture by day" do
-          help = HierarchyNotification.daily(@cond)
-
-          help.should include({ "date" => @day_string,
-                                "count" => @total_helps_count })
-        end
-
-        it "should create a hash by day with statuses" do
-          help = HierarchyNotification.daily(@cond)
-
-          hash = Hash.new
-          help.map { |h| hash[h["date"]] =
-                     { "helps" => h["count"] }}
-
-          hash.should include({ @day_string =>
-                                { "helps" => @total_helps_count }})
-        end
-
-        it "should ordering an array of statuses by day" do
-          subject.build_array(@cond, "helps").last.should eq(@total_helps_count)
-        end
+        subject.build_array(@cond, "helps").last.should eq(@total_helps_count)
       end
 
       it "days" do

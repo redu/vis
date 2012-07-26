@@ -1,5 +1,4 @@
 class SubjectsController < ApplicationController
-
   def activities
     activity = SubjectParticipation.new(params[:subject_id])
     activity.extend(SubjectParticipationRepresenter)

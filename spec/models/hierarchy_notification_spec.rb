@@ -80,26 +80,25 @@ describe HierarchyNotification do
       HierarchyNotification.answered(answers).to_set.should eq(helps.to_set)
     end
 
-    it "should take notifications by day" do
-      Factory(:hierarchy_notification, :created_at => @day + 1)
-
-      HierarchyNotification.by_day(@day).to_set.should eq(@facs.to_set)
-    end
-
-    it "should return the grade average from user" do
+    it "should return the grade average grouped by user" do
       grade = 0
       user_id = 1
       fac_times = 4
       fac_times.times do
         exer = Factory(:hierarchy_notification_exercise_finalized,
-                      :user_id => user_id, :grade => 5)
-       grade += exer.grade
+                       :user_id => user_id, :grade => 5)
+        grade += exer.grade
       end
 
       Factory(:hierarchy_notification_exercise_finalized,
               :user_id => 2)
 
-      HierarchyNotification.average_grade(user_id).should == grade/fac_times
+      avg = HierarchyNotification.average_grade
+      avg.each do |item|
+        if item["user_id"] == user_id
+          item["avg"].should == grade/fac_times
+        end
+      end
     end
 
     it "should take notifications by period" do
@@ -116,18 +115,6 @@ describe HierarchyNotification do
 
       HierarchyNotification.by_period(date1, date2).to_set.should \
         eq(noti_by_period.to_set)
-
-    end
-
-    it "should take notifications by user" do
-      noti_by_user = []
-      id = 1
-      2.times do
-        noti_by_user << Factory(:hierarchy_notification, :user_id => id)
-      end
-      Factory(:hierarchy_notification, :user_id => id+1)
-
-      HierarchyNotification.by_user(id).to_set.should == noti_by_user.to_set
     end
 
     it "notifications not removed should be taken" do
@@ -144,6 +131,22 @@ describe HierarchyNotification do
 
       HierarchyNotification.status_not_removed("activity").first.should \
         eq(noti[2])
+    end
+
+    it "should return collection grouped by day" do
+      date1 = "2011-04-17"
+      date2 = "2011-04-21"
+
+      Factory(:hierarchy_notification, :created_at => date1.to_date)
+      Factory(:hierarchy_notification, :created_at => date2.to_date)
+
+      daily = HierarchyNotification.daily
+
+      daily.each do |day|
+        if [date1, date2].include?(day["date"])
+          day["count"].should == 1
+        end
+      end
     end
   end
 

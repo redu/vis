@@ -36,31 +36,27 @@ class LectureParticipation
 
   # Filtrados por dia
   def helps_by_day
-    self.daily("help")
+    cond = notifications.status_not_removed("help").selector
+
+    build_array(cond, "helps")
   end
 
   def activities_by_day
-    self.daily("activity")
-  end
+    cond = notifications.status_not_removed("activity").selector
 
-  def answered_activities_by_day
-    self.daily("answered_activity")
+    build_array(cond, "activities")
   end
 
   def answered_helps_by_day
-    self.daily("answered_help")
+    cond = notifications.status_not_removed("answered_help").selector
+
+    build_array(cond, "answered_helps")
   end
 
-  def daily(type)
-    start = self.start
-    daily = []
+  def answered_activities_by_day
+    cond = notifications.status_not_removed("answered_activity").selector
 
-    (0..(self.end - self.start)).each do
-      daily << notifications.status_not_removed(type).by_day(start).count
-      start += 1
-    end
-
-    daily
+    build_array(cond, "answered_activities")
   end
 
   def days
@@ -69,6 +65,26 @@ class LectureParticipation
 
     (0..(self.end - self.start)).each do
       daily << start.strftime("%-d/%m")
+      start += 1
+    end
+
+    daily
+  end
+
+  def build_array(cond, type)
+    statuses = HierarchyNotification.daily(cond)
+
+    hash = Hash.new
+    statuses.map { |h| hash[h["date"]] = { type => h["count"] }}
+
+    start = self.start
+    daily = []
+
+    (0..(self.end - self.start)).each do
+      day = start.strftime("%Y-%-m-%-d")
+      res =  hash[day] ? hash[day][type] : 0
+
+      daily << res
       start += 1
     end
 

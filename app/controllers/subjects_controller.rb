@@ -1,6 +1,6 @@
 class SubjectsController < ApplicationController
   def activities
-    activity = SubjectParticipation.new(params[:subject_id])
+    activity = SubjectParticipation.new(params[:subjects])
     activity.extend(SubjectParticipationRepresenter)
 
     respond_to do |format|

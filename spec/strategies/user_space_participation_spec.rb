@@ -110,7 +110,6 @@ describe UserSpaceParticipation do
       end
 
       it "should return the average grade by user, space and period" do
-        debugger
         subject.average_grade[@users_id[1]]["average_grade"].should \
           == @avg_grade.first.grade
       end

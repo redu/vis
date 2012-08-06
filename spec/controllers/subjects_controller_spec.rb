@@ -4,7 +4,7 @@ describe SubjectsController do
   context "GET activities" do
     context "when format is NOT json" do
       before do
-        @params = { :subject_id => ["1", "2"],
+        @params = { :subjects => ["1", "2"],
                     :format => :html,
                     :locale => "pt-BR" }
       end
@@ -24,7 +24,7 @@ describe SubjectsController do
 
     context "when format is json" do
       before do
-        @params = { :subject_id => 1,
+        @params = { :subjects => ["1"],
                     :format => :json,
                     :locale => "pt-BR" }
 

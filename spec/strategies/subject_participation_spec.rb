@@ -116,4 +116,13 @@ describe SubjectParticipation do
         == @enroll_count - @remove_enrollment.length
     end
   end
+
+  context "bulding response - " do
+    [:helps, :answered_helps, :helps_answered, :helps_not_answered,
+     :subjects_finalized, :enrollments].each do |elem|
+       it "should retrieve a data response with #{elem} as element" do
+         subject.data(@id[0]).should have_key(elem)
+       end
+     end
+  end
 end

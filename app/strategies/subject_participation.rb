@@ -3,65 +3,82 @@ class SubjectParticipation
               :helps_not_answered, :subjects_finalized, :enrollments
 
   def initialize(subject_id)
-    @id = subject_id.map { |id| id.to_i }
+    @subject_id = subject_id
+
+    self.generate!
+  end
+
+  def generate!
+    self.helps
+    self.answered_helps
+    self.helps_answered
+    self.helps_not_answered
+    self.subjects_finalized
+    self.enrollments
+
+    @response = @subject_id.collect do |subject|
+      { :subject_id => subject.to_i,
+        :data => data(subject.to_i) }
+    end
+  end
+
+  def data(id)
+    { :helps => @helps[id] ? @helps[id]["helps"] : 0,
+      :answered_helps => @answered_helps[id] ?
+                         @answered_helps[id]["answered_helps"] : 0,
+      :helps_answered => @helps_answered[id] ?
+                         @helps_answered[id]["helps_answered"] : 0,
+      :helps_not_answered => @helps_not_answered[id] ?
+                             @helps_not_answered[id]["helps_not_answered"] : 0,
+      :subjects_finalized => @subjects_finalized[id] ?
+                             @subjects_finalized[id]["subjects_finalized"] : 0,
+      :enrollments => @enrollments ?
+                      @enrollments[id]["enrollments"] : 0 }
   end
 
   def notifications
-    HierarchyNotification.by_subject(@id)
+    HierarchyNotification.by_subject(@subject_id)
   end
 
   def helps
-    self.notifications.status_not_removed("help").grouped(:subject_id, "helps")
+    @helps = self.notifications.status_not_removed("help").
+      grouped(:subject_id, "helps")
   end
 
   def answered_helps
-    self.notifications.status_not_removed("answered_help").
+    @answered_helps = self.notifications.status_not_removed("answered_help").
       grouped(:subject_id, "answered_helps")
   end
 
   def helps_answered
     help = self.notifications.status_not_removed("help")
     ans = self.notifications.status_not_removed("answered_help")
-    help.answered(ans).grouped(:subject_id, "helps_answered")
+    @helps_answered = help.answered(ans).grouped(:subject_id, "helps_answered")
   end
 
   def helps_not_answered
-    self.helps.merge(self.helps_answered) {
+    @helps_not_answered = self.helps.merge(self.helps_answered) {
       |key, old, new| { "helps_not_answered" =>
                         old["helps"] - new["helps_answered"] }}
   end
 
   def subjects_finalized
-    removed = self.removed_subjects_finalized
-    total = self.notifications.by_type("subject_finalized").
-      grouped(:subject_id, "subjects_finalized")
-
-    total.merge(removed) { |key, old, new|
-      { "subjects_finalized" =>
-        old["subjects_finalized"] - new["removed_subjects_finalized"] }}
+    @subjects_finalized = not_removed("subject_finalized", "subjects_finalized")
   end
 
   def enrollments
-    removed = self.removed_enrollments
-    total = self.notifications.by_type("enrollment").
-      grouped(:subject_id, "enrollments")
-
-    total.merge(removed) { |key, old, new|
-      { "enrollments" =>
-        old["enrollments"] - new["removed_enrollments"] }}
+    @subjects_finalized = not_removed("enrollment", "enrollments")
   end
 
-  # Contagem de enrollments deve levar em conta
-  # as matrículas desfeitas nos módulos
-  def removed_enrollments
-    self.notifications.by_type("remove_enrollment").
-      grouped(:subject_id, "removed_enrollments")
-  end
+  # Remove da resposta todas as notificações que foram excluídas do core
+  def not_removed(type, key)
+    removed = notifications.by_type("remove_#{type}").
+      grouped(:subject_id, "removed_#{key}")
 
-  # Contagem de subjects finalized deve levar em conta
-  # os subjects finalizeds desfeitos nos módulos
-  def removed_subjects_finalized
-    self.notifications.by_type("remove_subject_finalized").
-      grouped(:subject_id, "removed_subjects_finalized")
+    total = self.notifications.by_type("#{type}").
+      grouped(:subject_id, "#{key}")
+
+    total.merge(removed) { |k, old, new|
+      { "#{key}" => old["#{key}"] - new["removed_#{key}"] }}
   end
 end

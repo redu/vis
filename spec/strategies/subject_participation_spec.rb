@@ -71,14 +71,8 @@ describe SubjectParticipation do
 
   subject{ SubjectParticipation.new(@id) }
 
-  it { should respond_to :helps }
-  it { should_not respond_to :helps= }
-  it { should respond_to :answered_helps }
-  it { should_not respond_to :answered_helps= }
-  it { should respond_to :subjects_finalized }
-  it { should_not respond_to :subjects_finalized= }
-  it { should respond_to :enrollments}
-  it { should_not respond_to :enrollments= }
+  it { should respond_to :response }
+  it { should_not respond_to :response= }
 
   context "preparing queries" do
     it "should take all notifications" do

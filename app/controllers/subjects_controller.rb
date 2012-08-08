@@ -1,6 +1,6 @@
 class SubjectsController < ApplicationController
   def activities
-    activity = SubjectParticipation.new(params[:subjects])
+    activity = SubjectParticipation.new(params[:subjects]).response
 
     respond_to do |format|
       format.json { render :json => activity,

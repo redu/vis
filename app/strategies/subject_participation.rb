@@ -1,6 +1,5 @@
 class SubjectParticipation
-  attr_reader :helps, :answered_helps, :helps_answered,
-              :helps_not_answered, :subjects_finalized, :enrollments
+  attr_reader :response
 
   def initialize(subject_id)
     @subject_id = subject_id
@@ -32,7 +31,7 @@ class SubjectParticipation
                              @helps_not_answered[id]["helps_not_answered"] : 0,
       :subjects_finalized => @subjects_finalized[id] ?
                              @subjects_finalized[id]["subjects_finalized"] : 0,
-      :enrollments => @enrollments ?
+      :enrollments => @enrollments[id] ?
                       @enrollments[id]["enrollments"] : 0 }
   end
 
@@ -59,7 +58,8 @@ class SubjectParticipation
   def helps_not_answered
     @helps_not_answered = self.helps.merge(self.helps_answered) {
       |key, old, new| { "helps_not_answered" =>
-                        old["helps"] - new["helps_answered"] }}
+                        old["helps"] - new["helps_answered"] ?
+                                       new["helps_answered"] : 0 }}
   end
 
   def subjects_finalized
@@ -67,7 +67,7 @@ class SubjectParticipation
   end
 
   def enrollments
-    @subjects_finalized = not_removed("enrollment", "enrollments")
+    @enrollments = not_removed("enrollment", "enrollments")
   end
 
   # Remove da resposta todas as notificações que foram excluídas do core
@@ -79,6 +79,7 @@ class SubjectParticipation
       grouped(:subject_id, "#{key}")
 
     total.merge(removed) { |k, old, new|
-      { "#{key}" => old["#{key}"] - new["removed_#{key}"] }}
+      { "#{key}" => old["#{key}"] - new["removed_#{key}"] ?
+                                    new["removed_#{key}"] : 0 }}
   end
 end

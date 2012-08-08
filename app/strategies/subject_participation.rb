@@ -56,10 +56,15 @@ class SubjectParticipation
   end
 
   def helps_not_answered
-    @helps_not_answered = self.helps.merge(self.helps_answered) {
+    # O hash inicial precisa ter a mesma chave para manter a consistência
+    # no momento de fazer o merge
+    helps = self.notifications.status_not_removed("help").
+      grouped(:subject_id, "helps_not_answered")
+
+    @helps_not_answered = helps.merge(@helps_answered) {
       |key, old, new| { "helps_not_answered" =>
-                        old["helps"] - new["helps_answered"] ?
-                                       new["helps_answered"] : 0 }}
+        old["helps_not_answered"] - ( new["helps_answered"] ?
+                                      new["helps_answered"] : 0 )}}
   end
 
   def subjects_finalized
@@ -79,7 +84,7 @@ class SubjectParticipation
       grouped(:subject_id, "#{key}")
 
     total.merge(removed) { |k, old, new|
-      { "#{key}" => old["#{key}"] - new["removed_#{key}"] ?
-                                    new["removed_#{key}"] : 0 }}
+      { "#{key}" => old["#{key}"] - ( new["removed_#{key}"] ?
+                                      new["removed_#{key}"] : 0 )}}
   end
 end

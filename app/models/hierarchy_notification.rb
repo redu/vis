@@ -72,8 +72,7 @@ class HierarchyNotification
                             '-' + d.getDate() }; }",
       :cond => cond,
       :reduce => "function(d, o) { o.count++; }",
-      :initial => { :count => 0 },
-    })
+      :initial => { :count => 0 } })
   end
 
   def self.grouped(key, type)

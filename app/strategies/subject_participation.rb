@@ -78,13 +78,13 @@ class SubjectParticipation
   # Remove da resposta todas as notificações que foram excluídas do core
   def not_removed(type, key)
     removed = notifications.by_type("remove_#{type}").
-      grouped(:subject_id, "removed_#{key}")
+      grouped(:subject_id, "remove_#{type}")
 
     total = self.notifications.by_type("#{type}").
-      grouped(:subject_id, "#{key}")
+      grouped(:subject_id, "#{type}")
 
     total.merge(removed) { |k, old, new|
-      { "#{key}" => old["#{key}"] - ( new["removed_#{key}"] ?
-                                      new["removed_#{key}"] : 0 )}}
+      { "#{key}" => old["#{type}"] - ( new["remove_#{type}"] ?
+                                       new["remove_#{type}"] : 0 ) }}
   end
 end

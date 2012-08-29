@@ -3,14 +3,15 @@ require 'spec_helper'
 describe HierarchyNotificationsController do
   context "POST create" do
     before do
-      # Factory.build(:hierarchy_notification)
+      @created_at = Time.now
       @params = {:hierarchy_notification =>
                  {:user_id => 1, :lecture_id => 1,
                   :subject_id => 1, :space_id => 1,
                   :course_id => 1, :status_id => nil,
                   :statusable_id => nil,
                   :statusable_type => nil, :in_response_to_id => nil,
-                  :in_response_to_type => nil, :type => "lecture_created" },
+                  :in_response_to_type => nil, :type => "lecture_created",
+                  :created_at => @created_at, :updated_at => @created_at},
                   :format => "json" }
     end
 
@@ -30,7 +31,25 @@ describe HierarchyNotificationsController do
         assigns[:hierarchy].should be_valid
       end
 
-      context "and well formated" do
+      context "if notification already exists" do
+        it "should respons with code 409 Conflict" do
+          h = HierarchyNotification.new(:user_id => 1, :lecture_id => 1,
+                                        :subject_id => 1, :space_id => 1,
+                                        :course_id => 1, :status_id => nil,
+                                        :statusable_id => nil,
+                                        :statusable_type => nil,
+                                        :in_response_to_id => nil,
+                                        :in_response_to_type => nil,
+                                        :type => "lecture_created",
+                                        :created_at => @created_at, :updated_at => @created_at )
+          h.save!
+
+          post :create, @params
+          response.code.should == "409"
+        end
+      end
+
+      context "if notification doesn't exist and well formated" do
         it "should responds within code 201 OK" do
           post :create, @params
           response.code.should == "201"
@@ -43,7 +62,7 @@ describe HierarchyNotificationsController do
         end
       end
 
-      context "and not well formated" do
+      context "if notification doesn't exist and not well formated" do
         it "should responds within code 400 Bad request" do
           params_error = { :hierarchy_notification => { :subject_id => 1 },
                             :format => :json }

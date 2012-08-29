@@ -5,11 +5,17 @@ class HierarchyNotificationsController < ApplicationController
   def create
     @hierarchy = HierarchyNotification.new(params[:hierarchy_notification])
 
-    respond_to do |format|
-      if @hierarchy.save
-        format.json { render :json => @hierarchy.to_json, :status => 201 }
-      else
-        format.json { render :json => @hierarchy.errors.to_json, :status => 400 }
+    if HierarchyNotification.notification_exists?(@hierarchy)
+      respond_to do |format|
+        format.json { render :json => {}, :status => 409 }
+      end
+    else
+      respond_to do |format|
+        if @hierarchy.save
+          format.json { render :json => @hierarchy.to_json, :status => 201 }
+        else
+          format.json { render :json => @hierarchy.errors.to_json, :status => 400 }
+        end
       end
     end
   end

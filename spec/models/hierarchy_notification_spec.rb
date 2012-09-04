@@ -41,7 +41,7 @@ describe HierarchyNotification do
         Factory(:hierarchy_notification, :subject_id => 1)
       end
 
-      HierarchyNotification.by_subject(1).to_set.should eq(subj.to_set)
+      HierarchyNotification.by_subject([1]).to_set.should eq(subj.to_set)
     end
 
     it "should take the notifications by lectures" do
@@ -147,6 +147,14 @@ describe HierarchyNotification do
           day["count"].should == 1
         end
       end
+    end
+
+    it "should return collection grouped by key in a customized hash" do
+      2.times do
+        Factory(:hierarchy_notification, :user_id => 9)
+      end
+
+      HierarchyNotification.grouped(:user_id, :tipo)[9]["tipo"].should == 2
     end
   end
 

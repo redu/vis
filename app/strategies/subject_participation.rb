@@ -1,65 +1,90 @@
 class SubjectParticipation
-  attr_reader :helps, :answered_helps, :helps_answered,
-              :helps_not_answered, :subjects_finalized,
-              :enrollments, :ranges, :markers, :measures
+  attr_reader :response
 
   def initialize(subject_id)
-    @id = subject_id
+    @subject_id = subject_id
+
+    self.generate!
+  end
+
+  def generate!
+    self.helps
+    self.answered_helps
+    self.helps_answered
+    self.helps_not_answered
+    self.subjects_finalized
+    self.enrollments
+
+    @response = @subject_id.collect do |subject|
+      { :subject_id => subject.to_i,
+        :data => data(subject.to_i) }
+    end
+  end
+
+  def data(id)
+    { :helps => @helps[id] ? @helps[id]["helps"] : 0,
+      :answered_helps => @answered_helps[id] ?
+                         @answered_helps[id]["answered_helps"] : 0,
+      :helps_answered => @helps_answered[id] ?
+                         @helps_answered[id]["helps_answered"] : 0,
+      :helps_not_answered => @helps_not_answered[id] ?
+                             @helps_not_answered[id]["helps_not_answered"] : 0,
+      :subjects_finalized => @subjects_finalized[id] ?
+                             @subjects_finalized[id]["subjects_finalized"] : 0,
+      :enrollments => @enrollments[id] ?
+                      @enrollments[id]["enrollments"] : 0 }
   end
 
   def notifications
-    HierarchyNotification.by_subject(@id)
+    HierarchyNotification.by_subject(@subject_id)
   end
 
   def helps
-    self.notifications.status_not_removed("help").count
+    @helps = self.notifications.status_not_removed("help").
+      grouped(:subject_id, "helps")
   end
 
   def answered_helps
-    self.notifications.status_not_removed("answered_help").count
+    @answered_helps = self.notifications.status_not_removed("answered_help").
+      grouped(:subject_id, "answered_helps")
   end
 
   def helps_answered
     help = self.notifications.status_not_removed("help")
     ans = self.notifications.status_not_removed("answered_help")
-    help.answered(ans).count
+    @helps_answered = help.answered(ans).grouped(:subject_id, "helps_answered")
   end
 
   def helps_not_answered
-    self.helps - self.helps_answered
+    # O hash inicial precisa ter a mesma chave para manter a consistência
+    # no momento de fazer o merge
+    helps = self.notifications.status_not_removed("help").
+      grouped(:subject_id, "helps_not_answered")
+
+    @helps_not_answered = helps.merge(@helps_answered) {
+      |key, old, new| { "helps_not_answered" =>
+        old["helps_not_answered"] - ( new["helps_answered"] ?
+                                      new["helps_answered"] : 0 )}}
   end
 
   def subjects_finalized
-    removed = self.removed_subjects_finalized
-    self.notifications.by_type("subject_finalized").count - removed
+    @subjects_finalized = not_removed("subject_finalized", "subjects_finalized")
   end
 
   def enrollments
-    self.notifications.by_type("enrollment").count - self.removed_enrollments
+    @enrollments = not_removed("enrollment", "enrollments")
   end
 
-  # Contagem de enrollments deve levar em conta
-  # as matrículas desfeitas nos módulos
-  def removed_enrollments
-    self.notifications.by_type("remove_enrollment").count
-  end
+  # Remove da resposta todas as notificações que foram excluídas do core
+  def not_removed(type, key)
+    removed = notifications.by_type("remove_#{type}").
+      grouped(:subject_id, "remove_#{type}")
 
-  # Contagem de subjects finalized deve levar em conta
-  # os subjects finalizeds desfeitos nos módulos
-  def removed_subjects_finalized
-    self.notifications.by_type("remove_subject_finalized").count
-  end
+    total = self.notifications.by_type("#{type}").
+      grouped(:subject_id, "#{type}")
 
-  # Método para construção do d3 bullet chart
-  def ranges
-    [self.enrollments]
-  end
-
-  def measures
-    [self.subjects_finalized]
-  end
-
-  def markers
-    self.ranges
+    total.merge(removed) { |k, old, new|
+      { "#{key}" => old["#{type}"] - ( new["remove_#{type}"] ?
+                                       new["remove_#{type}"] : 0 ) }}
   end
 end

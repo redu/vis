@@ -19,12 +19,11 @@ class HierarchyNotification
   validates_presence_of :type
 
   scope :by_space, lambda { |id| where(:space_id => id) }
-  scope :by_subject, lambda { |id| where(:subject_id => id) }
+  scope :by_subject, lambda { |id| any_in(:subject_id => id) }
   scope :by_lecture, lambda { |id| any_in(:lecture_id => id) }
   scope :by_type, lambda { |kind| where(:type => kind) }
   scope :answered, lambda { |answers|
-    any_in(:status_id => answers.distinct(:in_response_to_id)).where(
-      :type => "help") }
+    any_in(:status_id => answers.distinct(:in_response_to_id)) }
   scope :by_period, lambda { |date1, date2| where(
     :created_at => (date1..date2)) }
 
@@ -73,7 +72,15 @@ class HierarchyNotification
                             '-' + d.getDate() }; }",
       :cond => cond,
       :reduce => "function(d, o) { o.count++; }",
-      :initial => { :count => 0 },
-    })
+      :initial => { :count => 0 } })
+  end
+
+  def self.grouped(key, type)
+    selector = only(key).aggregate
+
+    hash = Hash.new
+    selector.map { |h| hash[h["#{key}"].to_i] = { "#{type}" => h["count"] }}
+
+    hash
   end
 end

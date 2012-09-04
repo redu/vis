@@ -58,12 +58,7 @@ class UserSpaceParticipation
   def build_hash(type, key)
     status =  HierarchyNotification.by_space(@space_id).
       by_period(@date_start, @date_end).
-      status_not_removed(type).only(:user_id).aggregate
-
-    hash = Hash.new
-    status.map { |h| hash[h["user_id"].to_i] = { key => h["count"].to_i }}
-
-    hash
+      status_not_removed(type).grouped(:user_id, key)
   end
 
   def average_grade

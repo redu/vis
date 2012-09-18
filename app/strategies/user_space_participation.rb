@@ -4,8 +4,8 @@ class UserSpaceParticipation
   def initialize(users_id, space_id, date_start, date_end)
     @users_id = users_id
     @space_id = space_id.to_i
-    @date_start = date_start
-    @date_end = date_end
+    @date_start = date_start.to_date
+    @date_end = date_end.to_date
 
     self.generate!
   end

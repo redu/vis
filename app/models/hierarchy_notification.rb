@@ -25,7 +25,7 @@ class HierarchyNotification
   scope :answered, lambda { |answers|
     any_in(:status_id => answers.distinct(:in_response_to_id)) }
   scope :by_period, lambda { |date1, date2| where(
-    :created_at => (date1..date2)) }
+    :created_at => (date1.midnight..date2.next.midnight)) }
 
   # Coleta Statuses que não foram destruídos
   scope :status_not_removed, lambda { |type| where(

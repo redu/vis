@@ -4,8 +4,8 @@ describe UserSpaceParticipation do
   before do
     @users_id = [1,2,3]
     @space_id = 1
-    @date_start = "2012-01-01"
-    @date_end = "2012-01-10"
+    @date_start = "2012-01-01".to_date
+    @date_end = "2012-01-10".to_date
     test_date = "2012-01-05".to_date
 
     @helps = []

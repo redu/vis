@@ -33,6 +33,13 @@ class HierarchyNotification
       :status_id.nin => where(
         :type => "remove_#{type}").only(:status_id).map(&:status_id)) }
 
+  # Coleta exercises_finalized que não foram destruídos
+  scope :exercise_finalized_not_removed, lambda { where(
+    :type => "exercise_finalized").where(
+      :lecture_id.nin => where(
+        :type => "remove_exercise_finalized").only(
+          :lecture_id).map(&:lecture_id)) }
+
   def self.notification_exists?(hierar)
     conditions = {
       :user_id => hierar.user_id,
@@ -75,6 +82,7 @@ class HierarchyNotification
       :initial => { :count => 0 } })
   end
 
+  # Agrupa consulta pelo "key"(bd) e monta o hash tendo como chave o "type"
   def self.grouped(key, type)
     selector = only(key).aggregate
 

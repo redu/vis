@@ -117,7 +117,7 @@ describe HierarchyNotification do
         eq(noti_by_period.to_set)
     end
 
-    it "notifications not removed should be taken" do
+    it "statuses not removed should be taken" do
       noti = []
 
       3.times do
@@ -130,6 +130,24 @@ describe HierarchyNotification do
               :status_id => noti[1].status_id)
 
       HierarchyNotification.status_not_removed("activity").first.should \
+        eq(noti[2])
+    end
+
+    it "exercises finalized not removed should be taken" do
+      noti = []
+
+      3.times do
+        noti << Factory(:hierarchy_notification_exercise_finalized)
+      end
+
+      Factory(:hierarchy_notification_exercise_finalized,
+              :type => "remove_exercise_finalized",
+              :lecture_id => noti[0].lecture_id)
+      Factory(:hierarchy_notification_exercise_finalized,
+              :type => "remove_exercise_finalized",
+              :lecture_id => noti[1].lecture_id)
+
+      HierarchyNotification.exercise_finalized_not_removed.first.should \
         eq(noti[2])
     end
 

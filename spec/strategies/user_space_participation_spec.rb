@@ -35,22 +35,23 @@ describe UserSpaceParticipation do
       # Destruindo statuses
       destroy = Factory(:hierarchy_notification_help, :space_id => @space_id,
                         :created_at => test_date, :user_id => @users_id[0])
+
       Factory(:hierarchy_notification,  :space_id => @space_id,
               :created_at => test_date, :user_id => @users_id[0],
               :status_id => destroy.status_id, :type => "remove_help")
 
       destroy = Factory(:hierarchy_notification_activity,
                         :space_id => @space_id,
-                        :created_at => test_date, :user_id => @users_id[0])
+                        :created_at => test_date, :user_id => @users_id[1])
       Factory(:hierarchy_notification,  :space_id => @space_id,
-              :created_at => test_date, :user_id => @users_id[0],
+              :created_at => test_date, :user_id => @users_id[1],
               :status_id => destroy.status_id, :type => "remove_activity")
 
       destroy = Factory(:hierarchy_notification_answered_help,
                         :space_id => @space_id,
-                        :created_at => test_date, :user_id => @users_id[0])
+                        :created_at => test_date, :user_id => @users_id[2])
       Factory(:hierarchy_notification,  :space_id => @space_id,
-              :created_at => test_date, :user_id => @users_id[0],
+              :created_at => test_date, :user_id => @users_id[2],
               :status_id => destroy.status_id, :type => "remove_answered_help")
 
       destroy = Factory(:hierarchy_notification_answered_activity,
@@ -60,6 +61,16 @@ describe UserSpaceParticipation do
               :created_at => test_date, :user_id => @users_id[0],
               :status_id => destroy.status_id,
               :type => "remove_answered_activity")
+
+      # Destruindo exercise_finalized
+      destroy = Factory(:hierarchy_notification_exercise_finalized,
+                        :space_id => @space_id,
+                        :created_at => test_date, :user_id => @users_id[1])
+
+      Factory(:hierarchy_notification, :space_id => @space_id,
+              :created_at => test_date, :user_id => @users_id[1],
+              :lecture_id => destroy.lecture_id,
+              :type => "remove_exercise_finalized")
     end
   end
 

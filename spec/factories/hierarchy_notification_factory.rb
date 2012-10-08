@@ -61,6 +61,7 @@ FactoryGirl.define do
   factory :hierarchy_notification_exercise_finalized,
           :class => :hierarchy_notification do |hierar|
     hierar.sequence(:user_id){ |n| n }
+    hierar.sequence(:lecture_id){ |l| l }
     hierar.type "exercise_finalized"
     hierar.sequence(:grade){ |a| a }
   end

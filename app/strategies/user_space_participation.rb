@@ -63,7 +63,7 @@ class UserSpaceParticipation
 
   def average_grade
     cond = HierarchyNotification.by_space(@space_id).
-      by_period(@date_start, @date_end).where(:type => "exercise_finalized").
+      by_period(@date_start, @date_end).exercise_finalized_not_removed.
       selector
 
     avg = HierarchyNotification.average_grade(cond)

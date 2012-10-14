@@ -129,8 +129,8 @@ describe HierarchyNotification do
       Factory(:hierarchy_notification, :type => "remove_activity",
               :status_id => noti[1].status_id)
 
-      HierarchyNotification.status_not_removed("activity").first.should \
-        eq(noti[2])
+      HierarchyNotification.status_not_removed("activity").should \
+        eq([noti[2]])
     end
 
     it "exercises finalized not removed should be taken" do
@@ -147,8 +147,8 @@ describe HierarchyNotification do
               :type => "remove_exercise_finalized",
               :lecture_id => noti[1].lecture_id)
 
-      HierarchyNotification.exercise_finalized_not_removed.first.should \
-        eq(noti[2])
+      HierarchyNotification.exercise_finalized_not_removed.should \
+        eq([noti[2]])
     end
 
     it "should return collection grouped by day" do

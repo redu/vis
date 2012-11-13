@@ -21,6 +21,3 @@
 *.sw*
 
 /dump
-
-#Ignore .rvmrc file
-/.rvmrc

@@ -24,7 +24,7 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem "rspec-rails", "~> 2.9.0"
   gem 'mongoid-rspec'
-  gem 'ruby-debug'
+  gem 'debugger'
   gem "shoulda-matchers"
 end
 

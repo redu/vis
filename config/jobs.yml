@@ -5,5 +5,5 @@ s3:
 jobs:
   - interval: 1d
     db: mongodb://:@localhost:27017/vis_production
-    location: redu-backup/production
+    location: redu-backup/vis/db-vis
     versions: 100

@@ -34,7 +34,6 @@ end
 
 gem 'jquery-rails'
 gem 'roar-rails'
-gem 'mongolicious'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

@@ -1,9 +1,9 @@
 class UserSpaceParticipation
   attr_reader :space_id, :response
 
-  def initialize(users_id, space_id, date_start, date_end)
-    @users_id = users_id
+  def initialize(space_id, date_start, date_end)
     @space_id = space_id.to_i
+    @users_id = space_users
     @date_start = date_start.to_date
     @date_end = date_end.to_date
 
@@ -73,5 +73,20 @@ class UserSpaceParticipation
               { "average_grade" => h["avg"] }}
 
     @average_grade
+  end
+
+  def space_users
+    removed = HierarchyNotification.by_space(@space_id).
+      by_type("remove_enrollment").grouped(:user_id, "remove_enrollment")
+
+    total = HierarchyNotification.by_space(@space_id).
+      by_type("enrollment").grouped(:user_id, "enrollment")
+
+    results = total.merge(removed) { |k, old, new|
+      { "enrollment" => old["enrollment"] - (new["remove_enrollment"] ?
+                                             new["remove_enrollment"] : 0) }}
+
+    results.delete_if { |key, value| value["enrollment"] < 1.0 }
+    results.keys
   end
 end

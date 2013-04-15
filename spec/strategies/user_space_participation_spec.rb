@@ -127,6 +127,25 @@ describe UserSpaceParticipation do
     end
   end
 
+  it "should take all current users in a space" do
+    space_id = 1
+    user_id = 0
+
+    2.times do
+      user_id += 1
+      Factory(:hierarchy_notification_enrollment,
+              :user_id => user_id, :space_id => space_id)
+      Factory(:hierarchy_notification_remove_enrollment,
+              :user_id => user_id, :space_id => space_id)
+
+    end
+
+    enroll = Factory(:hierarchy_notification_enrollment,
+                     :user_id => user_id, :space_id => space_id)
+
+    subject.send(:space_users, space_id).should eq([user_id])
+  end
+
   describe "building response - " do
     [:helps, :activities, :answered_helps,
      :answered_activities, :average_grade].each do |elem|

@@ -54,7 +54,6 @@ class HierarchyNotification
       :course_id => hierar.course_id,
       :type => hierar.type,
       :created_at => hierar.created_at,
-      :updated_at => hierar.updated_at
     }
 
     self.exists?(:conditions => conditions)

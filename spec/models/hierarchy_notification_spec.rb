@@ -179,7 +179,7 @@ describe HierarchyNotification do
   context "verify if a HierarchyNotification" do
     before do
       @old = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
-                                      :type => "enrollment")
+                                       :type => "enrollment")
       @old.save!
     end
 
@@ -187,7 +187,7 @@ describe HierarchyNotification do
       recent = HierarchyNotification.new(:user_id => 1, :subject_id => 1,
                                          :type => "enrollment",
                                          :created_at => @old.created_at,
-                                         :updated_at => @old.updated_at)
+                                         :updated_at => @old.updated_at + 1)
 
       HierarchyNotification.notification_exists?(recent).should be_true
     end

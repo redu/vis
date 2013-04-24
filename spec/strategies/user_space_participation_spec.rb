@@ -14,6 +14,13 @@ describe UserSpaceParticipation do
     @answered_activities = []
     @avg_grade = []
 
+    user_id = 0
+    3.times do
+      Factory(:hierarchy_notification_enrollment, space_id: @space_id,
+              user_id: @users_id[user_id])
+      user_id += 1
+    end
+
     2.times do
       @helps << Factory(:hierarchy_notification_help, :space_id => @space_id,
                         :created_at => test_date, :user_id => @users_id[0])
@@ -74,8 +81,7 @@ describe UserSpaceParticipation do
     end
   end
 
-  subject { UserSpaceParticipation.new(@users_id, @space_id,
-                                       @date_start, @date_end) }
+  subject { UserSpaceParticipation.new(@space_id, @date_start, @date_end) }
 
   it { should respond_to :space_id }
   it { should_not respond_to :space_id= }
@@ -128,22 +134,12 @@ describe UserSpaceParticipation do
   end
 
   it "should take all current users in a space" do
-    space_id = 1
-    user_id = 0
+    Factory(:hierarchy_notification_remove_enrollment, created_at: @date_start,
+            user_id: @users_id[0], space_id: @space_id)
+    Factory(:hierarchy_notification_remove_enrollment, created_at: @date_start,
+            user_id: @users_id[1], space_id: @space_id)
 
-    2.times do
-      user_id += 1
-      Factory(:hierarchy_notification_enrollment,
-              :user_id => user_id, :space_id => space_id)
-      Factory(:hierarchy_notification_remove_enrollment,
-              :user_id => user_id, :space_id => space_id)
-
-    end
-
-    enroll = Factory(:hierarchy_notification_enrollment,
-                     :user_id => user_id, :space_id => space_id)
-
-    subject.send(:space_users, space_id).should eq([user_id])
+    subject.send(:space_users).should eq([@users_id[2]])
   end
 
   describe "building response - " do

@@ -83,10 +83,10 @@ class UserSpaceParticipation
       by_type("enrollment").grouped(:user_id, "enrollment")
 
     results = total.merge(removed) { |k, old, new|
-      { "enrollment" => old["enrollment"] - (new["remove_enrollment"] ?
-                                             new["remove_enrollment"] : 0) }}
+      { "count" => old["enrollment"] - (new["remove_enrollment"] ?
+                                        new["remove_enrollment"] : 0) }}
 
-    results.delete_if { |key, value| value["enrollment"] < 1.0 }
+    results.delete_if { |key, value| (value["count"] < 1.0) if value["count"]}
     results.keys
   end
 end

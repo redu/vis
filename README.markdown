@@ -11,7 +11,7 @@ A versão requerida é a `2.2.0`.
 
 É importante notar que é necessário modificar os arquivos em [redu/config/environments/](https://github.com/redu/redu/blob/master/config/environments/production.rb#L79) para apontar para o novo endereço da aplicação.
 
-Também existe o [redu/config/mongoid.yml](https://github.com/redu/redu/blob/master/config/mongoid.yml) que também deve está de acordo com o `config/mongoid.yml' do projeto Vis.
+Também existe o [redu/config/mongoid.yml](https://github.com/redu/redu/blob/master/config/mongoid.yml) que também deve está de acordo com o `config/mongoid.yml` do projeto Vis.
 
 A aplicação Vis só possui o MongoDB como dependência para implantação.
 

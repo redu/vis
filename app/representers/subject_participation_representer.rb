@@ -1,5 +1,5 @@
 module SubjectParticipationRepresenter
-  include Roar::Representer::JSON
+  include Roar::JSON
 
   property :helps
   property :helps_answered

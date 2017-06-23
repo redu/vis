@@ -1,5 +1,5 @@
 module LectureParticipationRepresenter
-  include Roar::Representer::JSON
+  include Roar::JSON
 
   property :helps
   property :activities

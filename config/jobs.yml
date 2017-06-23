@@ -1,9 +1,0 @@
-s3:
-  access_id: AKIAIRKVQDTWT2NN4J4Q
-  secret_key: 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
-
-jobs:
-  - interval: 1d
-    db: mongodb://:@localhost:27017/vis_production
-    location: redu-backup/vis/db-vis
-    versions: 100

@@ -1,5 +1,5 @@
 module SubjectParticipationD3Representer
-  include Roar::Representer::JSON
+  include Roar::JSON
 
   property :ranges
   property :markers
